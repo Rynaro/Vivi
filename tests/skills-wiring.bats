@@ -20,32 +20,32 @@ AGENT_MD="${REPO_ROOT}/agent.md"
 # S1.8 — context-engineering.md references all 7 atlas-aci tools
 # ─────────────────────────────────────────────────────────────────────────────
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__list_dir (L1 domain scan)" {
-  grep -q 'mcp__atlas_aci__list_dir' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__list_dir (L1 domain scan)" {
+  grep -q 'mcp__atlas-aci__list_dir' "${CONTEXT_ENG}"
 }
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__search_text (L2 file identification)" {
-  grep -q 'mcp__atlas_aci__search_text' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__search_text (L2 file identification)" {
+  grep -q 'mcp__atlas-aci__search_text' "${CONTEXT_ENG}"
 }
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__search_symbol (L3 symbol identification)" {
-  grep -q 'mcp__atlas_aci__search_symbol' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__search_symbol (L3 symbol identification)" {
+  grep -q 'mcp__atlas-aci__search_symbol' "${CONTEXT_ENG}"
 }
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__graph_query (L3 caller/dependency chain)" {
-  grep -q 'mcp__atlas_aci__graph_query' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__graph_query (L3 caller/dependency chain)" {
+  grep -q 'mcp__atlas-aci__graph_query' "${CONTEXT_ENG}"
 }
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__view_file (L4 paginated context gathering)" {
-  grep -q 'mcp__atlas_aci__view_file' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__view_file (L4 paginated context gathering)" {
+  grep -q 'mcp__atlas-aci__view_file' "${CONTEXT_ENG}"
 }
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__test_dry_run (test oracle probe)" {
-  grep -q 'mcp__atlas_aci__test_dry_run' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__test_dry_run (test oracle probe)" {
+  grep -q 'mcp__atlas-aci__test_dry_run' "${CONTEXT_ENG}"
 }
 
-@test "S1.8: context-engineering.md references mcp__atlas_aci__memex_read (stored excerpt retrieval)" {
-  grep -q 'mcp__atlas_aci__memex_read' "${CONTEXT_ENG}"
+@test "S1.8: context-engineering.md references mcp__atlas-aci__memex_read (stored excerpt retrieval)" {
+  grep -q 'mcp__atlas-aci__memex_read' "${CONTEXT_ENG}"
 }
 
 @test "S1.8: context-engineering.md view_file calls are documented as PAGINATED (never full-dump)" {
@@ -65,7 +65,7 @@ AGENT_MD="${REPO_ROOT}/agent.md"
 
 @test "S1.8 S1.4-assembly: context-engineering.md documents view_file keyed by loci for in-loop assembly" {
   # The in-loop assembly procedure must mention view_file called around loci (file:line).
-  grep -q 'mcp__atlas_aci__view_file' "${CONTEXT_ENG}"
+  grep -q 'mcp__atlas-aci__view_file' "${CONTEXT_ENG}"
   # And it must be in the context of loci-driven assembly (both terms appear in the file).
   grep -q 'loci' "${CONTEXT_ENG}"
 }
@@ -167,10 +167,10 @@ AGENT_MD="${REPO_ROOT}/agent.md"
 # Agent.md guard — wiring must NOT be in agent.md (P0 token budget)
 # ─────────────────────────────────────────────────────────────────────────────
 
-@test "GUARD: agent.md does NOT contain inline mcp__atlas_aci__ tool references" {
+@test "GUARD: agent.md does NOT contain inline mcp__atlas-aci__ tool references" {
   # All atlas-aci wiring lives in skills/context-engineering.md, not the <=1000-token agent.md.
-  if grep -q 'mcp__atlas_aci__' "${AGENT_MD}"; then
-    echo "FAIL: agent.md contains mcp__atlas_aci__ wiring — must stay in skills/" >&3
+  if grep -q 'mcp__atlas-aci__' "${AGENT_MD}"; then
+    echo "FAIL: agent.md contains mcp__atlas-aci__ wiring — must stay in skills/" >&3
     return 1
   fi
 }
