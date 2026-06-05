@@ -107,4 +107,4 @@ On success: the loop emits a **candidate diff** for review — Vivi does **not**
 
 ---
 
-*Loop-Native Skill — external-feedback-driven, localized, fresh-context, anti-gaming, pass^k-gated. The capability APIVR-Δ refused; the reason Vivi exists.*
+*Loop-Native Skill — external-feedback-driven, localized, EIDOLONS_SANDBOX_FRESH_CONTEXT-gated (prior-transcript DECLINED), hard-precision-gated crystalium recall, mandatory post-pass^k procedural commit, anti-gaming, pass^k-gated. The capability APIVR-Δ refused; the reason Vivi exists.*
