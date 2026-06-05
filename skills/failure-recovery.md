@@ -178,6 +178,15 @@ When a fix touches multiple interconnected parts:
 
 ## Retry Decision Matrix
 
+> **Fresh-context retry (loop-native).** Each attempt runs as the loop's
+> `--fix-hook` from a CLEAN context: the localized feedback
+> (`$EIDOLONS_SANDBOX_FEEDBACK` — assertion + `file:line` loci + full log) +
+> acceptance criteria + working tree drive the next fix — **NOT** the accumulated
+> transcript. The "different approach" below is selected from the *localized
+> feedback*, never by re-reading the prior attempt's narrative (which re-introduces
+> self-conditioning). The 3-same-category cap is the **authority**; the loop's
+> `--max-attempts` is the **ceiling** — whichever trips first escalates to VIGIL.
+
 | Attempt | Condition | Action | Documentation Required |
 |---------|-----------|--------|-----------------------|
 | **1st failure** | HIGH or MED confidence | Apply targeted fix | Log: error, hypothesis, fix applied |

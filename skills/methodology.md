@@ -311,67 +311,95 @@ mcp__crystalium__ingest(
 
 ---
 
-## V — VERIFY Phase
+## V — VERIFY Phase (loop-native)
 
-Run and capture output for ALL of these:
+Vivi does **not** "run the checks once and decide." It **drives the closed loop**
+`eidolons sandbox loop` (see `skills/loop-native.md`) and acts as its
+`--fix-hook`: the loop runs the verification, and on failure re-invokes Vivi's
+repair step (R, below) in **fresh context**, bounded, until green or capped. This
+is the core of the loop-native cycle and the reason Vivi supersedes its
+predecessor — which ran V once and handed the running back.
 
-| Check | Tool | Pass Criteria |
-|-------|------|--------------|
-| Linter | Language-specific (Rubocop, ESLint, etc.) | Zero new violations |
-| New tests | Test runner | All test anchors from Plan phase pass |
-| Regression | Full test suite | No new failures |
-| Coverage | Coverage tool | No decrease in affected files |
-| Build | Build system | Clean build |
-| Type check | If applicable | Zero new type errors |
+### Configure the loop
+- `--tests`, or split `--regression`/`--reproduction`: the success command(s).
+  Success = the Plan-phase **test-anchors** plus the existing suite, with
+  **regression-first, then the new acceptance test** (passing only the new test
+  FAILS — anti-reward-hacking).
+- `--protect <glob>`: the anchoring tests; the fix-hook MUST NOT edit them
+  (a mutation aborts → VIGIL).
+- `--k <n>`: pass^k — a green that is non-deterministic across k re-runs is
+  **flaky → BLOCKED**, not accepted.
+- `--max-attempts N` + `--via <isolation>`: the bounded cap and the host sandbox
+  (untrusted/LLM-authored code needs ≥ container isolation, R8-03).
 
-**Decision**:
-- ALL PASS → proceed to **Δ (Delta)**
-- ANY FAIL → proceed to **R (Reflect)**
+### Verification checks (run by the loop each iteration)
+| Check | Pass criteria |
+|-------|---------------|
+| Regression (full suite) | no new failures — **runs FIRST** |
+| Test-anchors (new) | all pass |
+| Linter | zero new violations |
+| Coverage | no decrease in affected files |
+| Build / Type check | clean |
+| pass^k | green stable across k re-runs (else flaky → BLOCKED) |
 
-### Reliability-under-repetition gate (pass^k)
+### Decision
+- Loop reaches green (regression + reproduction + pass^k) → it emits a
+  **candidate diff** (diff-not-apply; the human applies) → proceed to **Δ**.
+- Loop caps / flaky / `protected-tests-mutated` → proceed to **R** (already
+  bounded); on the 3-same-category / cap threshold, escalate to VIGIL.
 
-A single green run is necessary but NOT sufficient. For any test the host can
-re-run (and ALWAYS for the post-merge regression suite in parallel-track mode,
-`skills/parallel-tracks.md`), frame verification as **pass^k**: a test that
-passes once but is **non-deterministic across repeats** is classified **flaky**
-and the change is **BLOCKED — not merged**, not silently accepted. This guards
-against the field's pass^k reliability collapse (a result that holds at k=1 but
-degrades at k>1) and mirrors the nexus "second install is idempotent"
-discipline. Treat a flaky anchor as a verification FAILURE: route to **R
-(Reflect)** with category `REGRESSION` or `INTEGRATION_ERROR`, do not advance to
-Δ.
+### Host-contingency / graceful degradation
+The loop's gain belongs to an RL-trained / loop-competent host. If no adequate
+isolation is available or the host is loop-incompetent, **degrade**: run the
+checks once, emit a diff for the human, and recommend the conservative fallback
+(`eidolons add apivr`). Never run untrusted code without `--via` or an explicit
+`--allow-unsafe-host`.
 
 ---
 
-## R — REFLECT Phase (Failure Only)
+## R — REFLECT Phase (Failure Only) — fresh-context repair
 
-Load skill: `agents/skills/failure-recovery.md`
+R runs as the loop's `--fix-hook` on each failing iteration. Load skill:
+`skills/failure-recovery.md`.
+
+### Fresh-context per attempt (the decisive discipline)
+**Each repair attempt starts from a CLEAN context**: the localized feedback
+(`$EIDOLONS_SANDBOX_FEEDBACK` — failing test ids, assertion, `file:line` loci,
+full log) + the original acceptance criteria + the current working tree — **NOT**
+the accumulated "prior error + new hypothesis" transcript. Carrying the prior
+trajectory re-creates self-conditioning (long-horizon execution failure is
+dominated by models conditioning on their own prior errors). This is the single
+biggest change from the predecessor's same-context retry, and it is why the loop
+helps rather than degrades.
 
 ### Evidence Gate (MANDATORY)
 
-**STOP** if you have no concrete artifacts. You need at least one of:
-- Test failure output with assertion details
-- Lint error with file:line
-- Build error with stack trace
-- Runtime error with traceback
-
-**No artifacts = ESCALATE immediately.** Do not guess at fixes.
+**STOP** if you have no concrete artifact (the loop's localized feedback IS the
+artifact: assertion + `file:line`). No artifacts = ESCALATE. Never guess at fixes.
 
 ### ECL emit on 3-failure escalation
 
-When the 3-failure-same-category threshold fires, the escalation MUST be wrapped in a `repair-failed-report.envelope.json` (template at `templates/repair-failed-report.envelope.json`). Required: `to.eidolon=vigil`, `performative=ESCALATE`, `trust_level=high`, `assumptions[0]="trigger: 3-failure-same-category"`. Profile schema: `schemas/repair-failed-report-profile.v1.json` (required keys: `attempts>=3`, `failure_category`, `last_test_command`). See `skills/failure-recovery.md` for the full escalation envelope contract. Skip when `ECL_VERSION` is absent.
+When the 3-same-category threshold fires (the methodology counter is the
+**authority**; the loop's `--max-attempts` is the substrate **ceiling** —
+whichever trips first), wrap the escalation in a `repair-failed-report.envelope.json`
+(template at `templates/repair-failed-report.envelope.json`). Required:
+`to.eidolon=vigil`, `performative=ESCALATE`, `trust_level=high`,
+`assumptions[0]="trigger: 3-failure-same-category"`. Profile schema:
+`schemas/repair-failed-report-profile.v1.json` (keys `attempts>=3`,
+`failure_category`, `last_test_command`). Skip the sidecar when `ECL_VERSION` is
+absent (the escalation still happens).
 
-### Failure Protocol
+### Failure Protocol (fresh-context, localized)
 
-See `agents/skills/failure-recovery.md` for the full classification taxonomy and recovery procedures. Quick reference:
+See `skills/failure-recovery.md` for the full taxonomy. Quick reference:
 
-| Attempt | Condition | Action |
-|---------|-----------|--------|
-| 1st failure | HIGH/MED confidence in root cause | Fix with targeted change |
-| 2nd failure | Same category as 1st | Different approach required |
-| 3rd failure | Same category | **ESCALATE** — summarize attempts |
-| Any failure | LOW confidence | **ESCALATE** immediately |
-| Any failure | No concrete error artifacts | **ESCALATE** immediately |
+| Iteration | Condition | Action |
+|-----------|-----------|--------|
+| Each | localized feedback present | Targeted fix to the reported loci, from **fresh context** |
+| 2nd, same category | — | A genuinely different approach (the feedback drives it, not the prior narrative) |
+| 3rd, same category | — | **ESCALATE** to VIGIL (cap reached) |
+| Any | LOW confidence / no artifact | **ESCALATE** immediately |
+| Any | fix would edit an anchoring test or exceed scope | **ABORT** (anti-reward-hacking) → escalate |
 
 ### Escalation Format
 

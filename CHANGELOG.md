@@ -8,6 +8,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+### Changed
+- **Stage 2 Track A — whole-cycle methodology authored loop-native.** `skills/methodology.md` V→R rewritten: **V drives** `eidolons sandbox loop` (regression-first, `--protect`, pass^k, `--via` isolation) instead of running checks once and handing back; **R repairs fresh-context per attempt** (localized feedback + acceptance criteria + working tree — NOT the accumulated transcript; reverses the predecessor's same-context self-conditioning retry), with the 3-same-category cap reconciled against the loop's `--max-attempts`. `skills/failure-recovery.md` retry matrix gains the fresh-context discipline; `skills/parallel-tracks.md` reverses the "autonomous loop out of scope (nexus gap R1)" note (each track's Verify now drives the loop). A/P/I/Δ preserved (the validated spine — evidence-anchored "preserve" verdict); host-contingency degrade-path documented.
+
 ## [0.1.0] — 2026-06-05 — Scaffold (loop-native successor to APIVR-Δ)
 
 ### Added

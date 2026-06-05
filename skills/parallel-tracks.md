@@ -17,13 +17,15 @@ single-threaded merge/aggregation step.**
 > not a fresh budget (trance-matrix R3) and not reflection past the published
 > caps (trance-matrix R4).
 
-> **Runtime cap (honest).** The per-track verifier cascade described here is
-> **host-interpreted methodology**, not a mechanical runtime. Vivi does not
-> auto-run the cascade; the host orchestrator executes the worktree spin-up,
-> the per-track verifier invocations, and the merge. The autonomous
-> edit-run-test loop remains nexus gap R1 and is out of scope for this repo.
-> Worktree creation and cleanup are a parent/host capability (the Eidolon
-> *specifies* isolation; the parent *executes* the bash).
+> **Runtime note (loop-native).** Unlike its predecessor — which left the
+> autonomous edit-run-test loop "out of scope (nexus gap R1)" — Vivi's per-track
+> Verify **drives the closed loop** `eidolons sandbox loop`
+> (`skills/loop-native.md`): each track is its own loop-native V→R (run →
+> localized feedback → fresh-context repair → re-run, `--protect` / pass^k), in
+> its own git worktree. The host/parent still executes the worktree spin-up +
+> cleanup and the single-threaded merge (the Eidolon *specifies* isolation; the
+> parent *executes* the bash) — but the per-track verifier cascade itself is the
+> closed loop, not host-interpreted prose.
 
 ---
 
