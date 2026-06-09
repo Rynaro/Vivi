@@ -134,6 +134,17 @@ pass 10/10 tests vacuously while every assumption about the real output is
 wrong. Capture one real sample (or a one-line dump of the live payload) first;
 that capture is the anchor.
 
+**RED-GATE rule (mandatory — Stage 2).** For a fix/repair task, the reproduction
+test anchor MUST be verified to **FAIL on the unmodified base tree** before any
+implementation begins. The substrate enforces this mechanically: pass
+`--require-red` to `eidolons sandbox loop` — a reproduction that already passes
+is **VACUOUS** (`final=vacuous-reproduction`) and cannot anchor a fix. The
+evidence is decisive: patching is near-solved when the repro test is *right*;
+repro-test validity — not patch generation — is the bottleneck (TDFlow: 88.8%
+vs 49% with verified repro tests). On a vacuous verdict, return to THIS step
+and re-derive the anchor from the acceptance criteria — do NOT burn loop
+attempts against a test that cannot fail.
+
 ### Step 2: Strategy Generation (Tree-of-Thoughts)
 
 Generate 3-5 genuinely different strategies. Requirements:
@@ -331,6 +342,13 @@ predecessor — which ran V once and handed the running back.
   **flaky → BLOCKED**, not accepted.
 - `--max-attempts N` + `--via <isolation>`: the bounded cap and the host sandbox
   (untrusted/LLM-authored code needs ≥ container isolation, R8-03).
+- `--require-red`: mechanical red gate — the reproduction anchor must FAIL on
+  the base tree before any fix attempt (P-phase RED-GATE rule, enforced).
+- `--fanout N`: parallel-sample-and-select shape for standard-tier hosts (see
+  Host-adaptive shape below) — N independent fresh-context candidates,
+  externally selected; NO self-repair iteration.
+- `--judge-hook <cmd>`: external diff-review judge over a surviving candidate
+  (layered hack detection — the sealed holdout alone is insufficient).
 
 ### Verification checks (run by the loop each iteration)
 | Check | Pass criteria |
@@ -348,12 +366,29 @@ predecessor — which ran V once and handed the running back.
 - Loop caps / flaky / `protected-tests-mutated` → proceed to **R** (already
   bounded); on the 3-same-category / cap threshold, escalate to VIGIL.
 
+### Host-adaptive shape (Stage 2) — iterate vs fanout
+The loop's gain belongs to an RL-trained / loop-competent host; on a weak host
+**self-repair iteration is the wrong shape** — feeding failures back injects new
+errors (RLEF; the self-repair literature). Vivi therefore picks the LOOP SHAPE
+by host tier instead of falling off the loop entirely:
+
+| Host tier | Shape | Invocation |
+|-----------|-------|------------|
+| thinking / loop-competent | **iterate** | `--max-attempts 3 --k 2 --require-red` |
+| standard / weak | **fanout** | `--fanout 3 --max-attempts 1 --k 2 --require-red` |
+
+In **fanout**, each candidate is an INDEPENDENT fresh-context, single-shot fix
+generated from the same base tree + the same localized base-failure feedback;
+the substrate selects the survivor externally (tests + pass^k + holdout +
+judge). The weak-host model never judges its own retry — selection is external
+by construction (R2E-Gym hybrid-verifier evidence: +8pp over either filter
+alone; parallel sampling beats sequential self-repair on weak models).
+
 ### Host-contingency / graceful degradation
-The loop's gain belongs to an RL-trained / loop-competent host. If no adequate
-isolation is available or the host is loop-incompetent, **degrade**: run the
-checks once, emit a diff for the human, and recommend the conservative fallback
-(`eidolons add apivr`). Never run untrusted code without `--via` or an explicit
-`--allow-unsafe-host`.
+If no adequate isolation is available, or the substrate (`eidolons sandbox`) is
+absent entirely, **degrade**: run the checks once, emit a diff for the human,
+and recommend the conservative fallback (`eidolons add apivr`). Never run
+untrusted code without `--via` or an explicit `--allow-unsafe-host`.
 
 ---
 

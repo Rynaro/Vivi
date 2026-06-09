@@ -182,3 +182,60 @@ AGENT_MD="${REPO_ROOT}/agent.md"
     return 1
   fi
 }
+
+# ─────────────────────────────────────────────────────────────────────────────
+# S2 — host-adaptive shape (iterate vs fanout) + red gate + judge gate wiring
+# ─────────────────────────────────────────────────────────────────────────────
+
+METHODOLOGY="${REPO_ROOT}/skills/methodology.md"
+
+@test "S2: loop-native.md documents the FANOUT shape (--fanout with --max-attempts 1)" {
+  grep -q -- '--fanout 3 --max-attempts 1' "${LOOP_NATIVE}"
+}
+
+@test "S2: loop-native.md passes --require-red in both shapes" {
+  [ "$(grep -c -- '--require-red' "${LOOP_NATIVE}")" -ge 2 ]
+}
+
+@test "S2: loop-native.md carries the fanout candidate discipline keyed by EIDOLONS_SANDBOX_CANDIDATE" {
+  grep -q 'EIDOLONS_SANDBOX_CANDIDATE' "${LOOP_NATIVE}"
+  grep -qi 'candidate 2 the runner-up' "${LOOP_NATIVE}"
+}
+
+@test "S2: loop-native.md carries the EVIDENCE GATE (no feedback -> no edit, exit non-zero)" {
+  grep -qi 'EVIDENCE GATE' "${LOOP_NATIVE}"
+  grep -qi 'Never hallucinate a failure to fix' "${LOOP_NATIVE}"
+}
+
+@test "S2: loop-native.md documents vacuous-reproduction as a return-to-P signal" {
+  grep -q 'vacuous-reproduction' "${LOOP_NATIVE}"
+}
+
+@test "S2: loop-native.md documents the judge gate (judge-rejected)" {
+  grep -q 'judge-rejected' "${LOOP_NATIVE}"
+  grep -q -- '--judge-hook' "${LOOP_NATIVE}"
+}
+
+@test "S2: loop-native.md escalation carries the oscillation flag (loop_detected)" {
+  grep -q 'loop_detected' "${LOOP_NATIVE}"
+}
+
+@test "S2: methodology.md P-phase carries the RED-GATE rule (fail on base before implementing)" {
+  grep -qi 'RED-GATE rule' "${METHODOLOGY}"
+  grep -qi 'FAIL on the unmodified base tree' "${METHODOLOGY}"
+}
+
+@test "S2: methodology.md V-phase carries the host-adaptive shape table (iterate vs fanout)" {
+  grep -qi 'Host-adaptive shape' "${METHODOLOGY}"
+  grep -q -- '--fanout 3 --max-attempts 1' "${METHODOLOGY}"
+}
+
+@test "S2: methodology.md keeps graceful degradation for a substrate-less host" {
+  grep -qi 'graceful degradation' "${METHODOLOGY}"
+  grep -q 'eidolons add apivr' "${METHODOLOGY}"
+}
+
+@test "S2: agent.md stays a pointer — no inline Stage-2 loop wiring in the always-loaded entry" {
+  ! grep -q -- '--fanout' "${AGENT_MD}"
+  ! grep -q -- '--require-red' "${AGENT_MD}"
+}

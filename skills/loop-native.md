@@ -17,15 +17,36 @@ The closed execution-feedback loop is the most-replicated performance lever for 
 
 After the P-phase test-anchors exist and the I-phase produced an initial edit, the V phase **delegates running to the substrate** and Vivi acts as the edit step:
 
+Vivi picks the **loop shape by host tier** (Stage 2 — host-adaptive):
+
+**ITERATE** (thinking / loop-competent host):
 ```
 eidolons sandbox loop \
   --via "<isolation>"                     # microVM/container — REQUIRED for untrusted code (R8-03)
   --tests "<the test command>"            # or --regression <cmd> --reproduction <cmd>
   --protect "<glob of the anchoring tests>"   # anti-reward-hacking
+  --require-red                           # red gate: the repro anchor must FAIL on base first
   --k 2                                   # pass^k: a flaky green is BLOCKED
   --max-attempts 3                        # reconciled with the ≤3-same-category budget
+  --judge-hook "<external diff judge>"    # layered hack detection (when available)
   --fix-hook "<invoke Vivi's repair step>"    # THIS skill, per iteration
 ```
+
+**FANOUT** (standard / weak host — parallel-sample-and-select):
+```
+eidolons sandbox loop \
+  --via "<isolation>" --tests "..." --protect "..." --require-red --k 2 \
+  --fanout 3 --max-attempts 1 \
+  --judge-hook "<external diff judge>" \
+  --fix-hook "<invoke Vivi's candidate step>"   # THIS skill, once per candidate
+```
+
+On a weak host, self-repair iteration is the WRONG shape — feeding failures back
+injects new errors (RLEF; self-repair degrades below ~strong-tier). Fanout
+replaces the retry chain with N **independent fresh-context candidates** from
+the same base tree + the same localized base-failure feedback; the SUBSTRATE
+selects the survivor externally (tests + pass^k + sealed holdout + judge). The
+model never judges its own retry.
 
 The substrate owns the bounded control flow, isolation, diff-not-apply, and the VIGIL escalation; **Vivi owns the reasoning inside `--fix-hook`.** The nexus never edits or merges.
 
@@ -81,6 +102,21 @@ The loop invokes the fix-hook once per failing iteration. Vivi's invocation MUST
   Recall`. Procedural/semantic hits short-circuit re-derivation. Ignore low-confidence hits.
   Never let a memory miss block the edit step.
 
+- **EVIDENCE GATE (mandatory — backported from the APIVR-Δ spine).** If
+  `$EIDOLONS_SANDBOX_FEEDBACK` is missing, empty, or unparseable, do **NOT**
+  guess a fix from memory of the task. A repair without concrete failure
+  evidence is speculation — read `$EIDOLONS_SANDBOX_FULL_LOG` directly; if that
+  too is absent, make NO edit and exit non-zero so the loop records a failed
+  attempt and escalates on cap. Never hallucinate a failure to fix.
+
+- **Fanout candidate discipline (`EIDOLONS_SANDBOX_CANDIDATE` set).** You are
+  ONE independent candidate, not a retry chain: produce one coherent, COMPLETE
+  fix in a single shot — there is no second pass to finish a half-edit.
+  **Diversify by candidate index:** candidate 1 implements the P-phase
+  top-ranked strategy; candidate 2 the runner-up; candidate 3+ the next ranked
+  (or a materially different decomposition). N samples of the SAME strategy
+  waste the fanout; the selection gate can only pick a survivor that exists.
+
 ## 3 — Anti-reward-hacking obligations (the loop AMPLIFIES gaming)
 
 A closed loop with a pass/fail oracle is precisely what incentivizes evaluator-gaming (a structural equilibrium, not a correctable bug). Vivi's inherited anti-overfit spine is the guardrail; in the loop it is **mechanically enforced** by the substrate, and Vivi must never attempt to circumvent it:
@@ -88,6 +124,14 @@ A closed loop with a pass/fail oracle is precisely what incentivizes evaluator-g
 - **Never edit the anchoring tests.** They are passed to `--protect`; a mutation aborts the loop and escalates to VIGIL. Fix the *implementation*, not the oracle.
 - **Regression-first, then reproduction.** Success requires the pre-existing suite to pass **and** the newly-anchored acceptance test. Passing only the new test FAILS.
 - **No always-pass shims, no peeking** at future commits / gold patches.
+- **Red gate (`--require-red`).** A reproduction anchor that passes on the base
+  tree is VACUOUS — the substrate blocks the run (`final=vacuous-reproduction`).
+  Return to P and re-derive the anchor; never weaken a repro test to "make the
+  gate happy".
+- **Judge gate (`--judge-hook`).** A candidate that survives visible tests +
+  pass^k + holdout may still be a heuristic non-fix; an external diff-review
+  judge can reject it (`judge-rejected`). The judge's verdict is final for that
+  candidate — do not argue with it, produce a better fix.
 
 ## 4 — pass^k before accepting
 
@@ -97,7 +141,7 @@ A single green run is necessary but not sufficient. With `--k > 1`, a candidate 
 
 ## 5 — Escalation (bounded; reconciled)
 
-Vivi's methodology owns the **≤3-same-category** retry budget (the authority); the substrate's `--max-attempts` is the ceiling. Whichever trips first ends the loop and emits the existing ECL `repair-failed-report` to **VIGIL** (no new performative; the closed 10-set is preserved). Provide the localized feedback + the candidate diff in the hand-off.
+Vivi's methodology owns the **≤3-same-category** retry budget (the authority); the substrate's `--max-attempts` is the ceiling. Whichever trips first ends the loop and emits the existing ECL `repair-failed-report` to **VIGIL** (no new performative; the closed 10-set is preserved). Provide the localized feedback + the candidate diff in the hand-off. **Oscillation flag (backported from the APIVR-Δ spine):** if the attempts alternated between two states (fix A breaks test B, fix B breaks test A — same loci flip-flopping across feedback), set `loop_detected: true` in the report payload so VIGIL starts from the oscillation, not from the last symptom.
 
 ## 6 — Output
 
