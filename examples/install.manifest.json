@@ -43,7 +43,10 @@
       "vendor_sha256": "0000000000000000000000000000000000000000000000000000000000000005"
     }
   ],
-  "hosts_wired": ["claude-code", "codex"],
+  "hosts_wired": [
+    "claude-code",
+    "codex"
+  ],
   "files_written": [
     {
       "path": "agent.md",
@@ -94,6 +97,18 @@
       "mode": "created"
     },
     {
+      "path": "skills/loop-native.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000008",
+      "role": "skill",
+      "mode": "created"
+    },
+    {
+      "path": "skills/parallel-tracks.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000009",
+      "role": "skill",
+      "mode": "created"
+    },
+    {
       "path": "schemas/install.manifest.v1.json",
       "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "role": "other",
@@ -114,7 +129,9 @@
   ],
   "handoffs_declared": {
     "upstream": [],
-    "downstream": ["idg"]
+    "downstream": [
+      "idg"
+    ]
   },
   "token_budget": {
     "entry": 420,
@@ -122,13 +139,24 @@
   },
   "comm": {
     "envelope_version": "1.0",
-    "emits": ["vivi-completion-report", "repair-failed-report", "reasoning-request"],
-    "verifies_incoming": ["scout-report", "spec", "root-cause-report", "reasoning-report"]
+    "emits": [
+      "vivi-completion-report",
+      "repair-failed-report",
+      "reasoning-request"
+    ],
+    "verifies_incoming": [
+      "scout-report",
+      "spec",
+      "root-cause-report",
+      "reasoning-report"
+    ]
   },
   "security": {
     "reads_repo": true,
     "reads_network": false,
     "writes_repo": true,
-    "persists": [".eidolons/vivi/memories/"]
+    "persists": [
+      ".eidolons/vivi/memories/"
+    ]
   }
 }
