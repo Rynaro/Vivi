@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-# tests/install.bats — ECL install gates for Vivi v0.1.0
+# tests/install.bats — ECL install gates for Vivi v1.0.0
 
 load helpers.bash
 
@@ -12,8 +12,8 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
   [[ "$output" =~ ^[0-9]+\.[0-9]+ ]]
 }
 
-@test "install.sh declares EIDOLON_VERSION 0.1.0" {
-  grep -q 'EIDOLON_VERSION="0.1.0"' "${REPO_ROOT}/install.sh"
+@test "install.sh declares EIDOLON_VERSION 1.0.0" {
+  grep -q 'EIDOLON_VERSION="1.0.0"' "${REPO_ROOT}/install.sh"
 }
 
 @test "install.sh declares ECL_VERSION_VAL" {

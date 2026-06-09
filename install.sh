@@ -3,7 +3,7 @@ set -euo pipefail
 
 EIDOLON_NAME="vivi"
 EIDOLON_SLUG="vivi"
-EIDOLON_VERSION="0.1.0"
+EIDOLON_VERSION="1.0.0"
 METHODOLOGY="Vivi"
 ECL_VERSION_VAL="1.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

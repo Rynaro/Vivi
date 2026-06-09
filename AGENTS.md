@@ -1,6 +1,6 @@
 ---
 name: vivi
-version: 0.1.0
+version: 1.0.0
 methodology: Vivi
 methodology_version: 1.0
 role: feature-implementation — Evidence-grounded feature implementation for brownfield codebases

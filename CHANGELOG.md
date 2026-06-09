@@ -8,6 +8,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-06-09 — loop-native coder, host-adaptive, measurement-validated
+
 ### Added
 - **Stage 2 — host-adaptive loop shape (iterate vs fanout) + red gate + judge gate.** `skills/loop-native.md` + `skills/methodology.md`: on a **thinking / loop-competent host** Vivi iterates (`--max-attempts 3 --k 2 --require-red`); on a **standard / weak host** it switches the SHAPE to **fanout** (`--fanout 3 --max-attempts 1`) — N independent fresh-context single-shot candidates from the same base tree + the same localized base-failure feedback, selected EXTERNALLY by the substrate (tests + pass^k + sealed holdout + judge); the weak-host model never judges its own retry (self-repair degrades on weak hosts — RLEF / Olausson; parallel-sample-and-select is the evidence-backed alternative — R2E-Gym). **Fanout candidate discipline:** candidates diversify by `EIDOLONS_SANDBOX_CANDIDATE` index over the P-phase strategy ranking. **RED-GATE rule** (P-phase, mandatory): the reproduction anchor must FAIL on the unmodified base tree (`--require-red`; vacuous → return to P, never weaken the test — TDFlow). **Judge gate**: `--judge-hook` diff-review rejection is final per candidate. **EVIDENCE GATE** (backported from the APIVR-Δ spine): no feedback artefact → no edit, exit non-zero — never hallucinate a failure to fix. Escalation gains the **`loop_detected` oscillation flag**. 11 new wiring tests (119/119).
 
