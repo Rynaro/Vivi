@@ -24,7 +24,7 @@ Vivi is **derived from `APIVR-Delta@v3.6.0`** and inherits its validated discipl
 
 ## Roadmap to v1.0 (gated)
 
-This scaffold (v0.1.0) has the inherited spine + the loop-native core. Before v1.0:
+v1.0.0 ships the inherited spine + the loop-native core + the whole-cycle methodology + the host-adaptive shape. The original v1.0 gates, now met:
 1. **Whole-cycle hardening** — author the full loop-native A/P/I/V/Δ (per-phase evidence-anchored review; promote fresh-context everywhere).
 2. **Measured holdout** — run Vivi vs the APIVR-Δ control on a contamination-screened, private, budget-matched, pass^k suite, on a declared loop-competent host. **This number gates v1.0** and tests the reversal conditions.
 3. **Nexus intake** — roster entry + crew recomposition (`ATLAS→SPECTRA→Vivi→IDG`) + APIVR-Δ demotion (the `default_for_class` routing tiebreak is already shipped, dormant).
