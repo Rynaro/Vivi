@@ -51,6 +51,57 @@ mcp__crystalium__recall(
 
 Fold relevant hits into mission context (≤ 1-2K tokens summarized).
 
+### Per-Iteration Failure-Signature Recall (V-VERIFY, inside --fix-hook)
+
+**ADAPTER-NOT-ENGINE: the CODER (Vivi) issues this call; sandbox.sh never does.**
+
+Before making any edit in a `--fix-hook` invocation, derive the failure-signature from
+`$EIDOLONS_SANDBOX_FEEDBACK` and query procedural/semantic memory for prior fixes:
+
+```
+feedback = parse_json($EIDOLONS_SANDBOX_FEEDBACK)
+
+# Build the failure signature (keyed by stable, localized fields — not the full log)
+failure_sig = {
+  loci:      feedback.loci,        # file:line array — normalized by the substrate
+  test_name: feedback.test_name,   # failing test identifiers
+  failing:   feedback.failing      # failure category/label
+}
+
+mcp__crystalium__recall(
+  scope  = { project: <cwd-project>, agent_class_visibility: "vivi" },
+  query  = failure_sig,            # keyed by the localized failure signal
+  k      = 4,
+  layers = ["procedural", "semantic"]   # LEAD with procedural + semantic; NOT raw episodic
+)
+```
+
+**HARD precision-gate (CTIM-Rover counter-evidence).** Raw episodic memory (prior
+attempt transcripts, exact stack traces, full diffs) DEGRADES SE-agent performance —
+it re-introduces self-conditioning through the back door. This recall is PRECISION-GATED:
+
+- Lead with `layer=procedural` (verified fix-PATTERNS: "for this class of failure at
+  these file:line targets, the pattern is...") and `layer=semantic` (root-cause knowledge:
+  "this framework version has this class of bug").
+- Do NOT retrieve raw `episodic` trajectories here. If `layers=["episodic"]`-only results
+  are returned, IGNORE them. They are indexed by task outcome, not by failure signature,
+  and applying a prior attempt's full trajectory is exactly the self-conditioning the
+  fresh-context discipline prohibits.
+- A low-confidence recall (score below threshold, or no relevant hit) is IGNORED, not
+  blindly applied. A bad procedural hit is worse than no hit — it steers the repair
+  toward a known-wrong path.
+- If the recall surfaces a procedural entry that matches the failure signature (high
+  confidence), use it to short-circuit re-derivation of the fix strategy. Document that
+  you are reusing a stored pattern (auditability).
+
+Cross-Eidolon composability: VIGIL persists failure-signatures (from its root-cause-report
+hand-offs) into CRYSTALIUM with matching `loci`/`test_name`/`failing` keys. When a Vivi
+failure signature matches a VIGIL-authored entry, the recall surfaces it — enabling
+cross-Eidolon pattern reuse without any direct inter-Eidolon call.
+
+**Graceful skip:** if `mcp__crystalium__recall` is unavailable or the call fails,
+proceed to the edit step without delay. Never block the fix-hook on a memory miss.
+
 ### Plan Phase — Checkpoint + Replan
 
 After the Execution Plan is produced (P-PLAN phase output):
@@ -107,6 +158,44 @@ mcp__crystalium__commit(
 ```
 
 Unverified patterns → `layer = "semantic"` with a `quality: candidate` tag.
+
+### Mandatory Post-pass^k Commit (V-VERIFY, on loop success)
+
+**ADAPTER-NOT-ENGINE: the CODER (Vivi) issues this call; sandbox.sh never does.**
+
+When the sandbox loop exits with `final="passed"` (confirmed pass^k-green — NOT just
+a single green run), Vivi **MUST** commit the verified fix-pattern to procedural memory.
+This is MANDATORY, not discretionary. A pass^k-green is an extremely high-quality
+signal — the fix is reproducible. Discarding it wastes the most reliable learning
+opportunity in the loop.
+
+```
+mcp__crystalium__commit(
+  layer   = "procedural",
+  payload = {
+    pattern_name:      <brief description of the fix, e.g. "nil-guard before X.call in foo.go:42">,
+    failure_signature: {
+      loci:      <the loci array from feedback.json that triggered this fix>,
+      test_name: <the failing test names>,
+      failing:   <the failure category>
+    },
+    fix_diff:          <the minimal diff that resolved the failure>,
+    anchoring_tests:   <the test name(s) that confirmed pass^k>,
+    domain:            <module/area>,
+    quality:           "verified",
+    pass_k:            <k value used, e.g. 2>
+  },
+  provenance = { author_agent: "vivi", quality: "verified" }
+)
+```
+
+The `failure_signature` field is the admission record: it makes this entry retrievable
+by the Per-Iteration Failure-Signature Recall (above) the next time the same class of
+failure appears — in this session or a future one, by Vivi or by VIGIL.
+
+**If the commit call fails:** log the failure to stderr and continue — never block the
+success path on a memory write. The fix is already applied; the commit is a durability
+enhancement, not a gate.
 
 ### Verify Phase — Ingest Completion Report (V-VERIFY / I-exit)
 
