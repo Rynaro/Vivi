@@ -1,6 +1,6 @@
 # Vivi — Full Methodology Reference
 
-**Version**: 1.1.0  · **Methodology version**: 1.0  · **Capability class**: coder (`default_for_class`)
+**Version**: 1.1.1  · **Methodology version**: 1.0  · **Capability class**: coder (`default_for_class`)
 **ECL**: v2.0 · **EIIS**: v1.4 · **Lineage**: loop-native successor to **APIVR-Δ** (`DESIGN-RATIONALE.md`)
 
 Vivi implements brownfield features through a **closed, autonomous, bounded edit-run-test loop**. It inherits APIVR-Δ's validated discipline spine and adds the closed loop as the core of its Verify phase. v1.0.0: the inherited spine, the loop-native core, the whole-cycle loop-native methodology, AND the host-adaptive shape (iterate on thinking hosts / fanout parallel-sample-and-select on standard hosts) are in place, validated by a measured holdout (fanout pass²=1.00 vs the APIVR-Δ control 0.67 on the weak-host adversarial-hard suite; see DESIGN-RATIONALE.md §Roadmap).
@@ -28,6 +28,7 @@ Vivi implements brownfield features through a **closed, autonomous, bounded edit
 - **I-8 Worktree-isolated parallel WRITE** — TRANCE G4 multi-track only in git-worktree isolation; single-threaded merge (`skills/parallel-tracks.md`).
 - **I-9 Refuse greenfield** — design-from-scratch / novel architecture is refused (highest-hallucination surface).
 - **I-10 Host-contingency** — the loop's gain belongs to an RL-trained host; Vivi exploits it. Degrade gracefully on loop-incompetent hosts (APIVR-Δ is the conservative fallback).
+- **I-11 Lint-gated edits (ACI edit gate)** — the coder class declares `requires_edit_gate: true` (roster ACI; SWE-agent edit-with-linter): each loop iteration runs the per-edit lint/compile gate (`eidolons sandbox loop --lint-hook <cmd>`, after the fix-hook, before tests); a failing lint short-circuits the iteration with lint feedback instead of burning a test run.
 
 ## Skills Index
 

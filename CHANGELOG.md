@@ -8,6 +8,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+## [1.1.1] — 2026-06-10 — SPEC lint-gate pointer (nexus doctor D11 advisory)
+
+### Added
+- **SPEC.md invariant I-11 — Lint-gated edits (ACI edit gate).** Documents that the coder class declares `requires_edit_gate: true` (roster ACI; SWE-agent edit-with-linter) and that each loop iteration runs the per-edit lint/compile gate (`eidolons sandbox loop --lint-hook <cmd>`, after the fix-hook, before tests). Clears the nexus `doctor --deep` D11 advisory ("SPEC.md does not yet reference the lint/edit gate").
+
 ## [1.1.0] — 2026-06-10 — loop-native wiring fix + stamp hygiene + canonical skill template
 
 ### Fixed
