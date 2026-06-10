@@ -71,8 +71,8 @@ teardown() {
   grep -q '"decision":"refused"' "${REPO_ROOT}/skills/verify-incoming.md"
 }
 
-@test "skill frontmatter methodology_version is 3.4" {
-  grep -q 'methodology_version: "1.0"' "${REPO_ROOT}/skills/verify-incoming.md"
+@test "skill frontmatter has metadata.methodology Vivi" {
+  grep -q 'methodology: Vivi' "${REPO_ROOT}/skills/verify-incoming.md"
 }
 
 @test "skill frontmatter name is vivi-verify-incoming" {
@@ -199,7 +199,7 @@ teardown() {
   local trace_file="${TRACE_DIR}/${thread_id}.jsonl"
   local ts="2026-05-08T00:00:00Z"
   local event_line
-  event_line="{\"ts\":\"${ts}\",\"event\":\"verify_pass\",\"message_id\":\"${thread_id}\",\"thread_id\":\"${thread_id}\",\"from\":\"atlas@1.5.0\",\"to\":\"vivi@3.4\",\"performative\":\"PROPOSE\",\"integrity_method\":\"sha256\"}"
+  event_line="{\"ts\":\"${ts}\",\"event\":\"verify_pass\",\"message_id\":\"${thread_id}\",\"thread_id\":\"${thread_id}\",\"from\":\"atlas@1.5.0\",\"to\":\"vivi@<version>\",\"performative\":\"PROPOSE\",\"integrity_method\":\"sha256\"}"
   printf '%s\n' "${event_line}" >> "${trace_file}"
   [ -f "${trace_file}" ]
   if command -v jq &>/dev/null; then
@@ -236,7 +236,7 @@ teardown() {
   local ts="2026-05-08T00:00:00Z"
   local event_line
   # blocking posture: verify_fail event includes decision=refused
-  event_line="{\"ts\":\"${ts}\",\"event\":\"verify_fail\",\"message_id\":\"${thread_id}\",\"thread_id\":\"${thread_id}\",\"from\":\"atlas@1.5.0\",\"to\":\"vivi@3.4\",\"integrity_method\":\"sha256\",\"verify_failure_code\":\"INTEGRITY_MISMATCH\",\"decision\":\"refused\"}"
+  event_line="{\"ts\":\"${ts}\",\"event\":\"verify_fail\",\"message_id\":\"${thread_id}\",\"thread_id\":\"${thread_id}\",\"from\":\"atlas@1.5.0\",\"to\":\"vivi@<version>\",\"integrity_method\":\"sha256\",\"verify_failure_code\":\"INTEGRITY_MISMATCH\",\"decision\":\"refused\"}"
   printf '%s\n' "${event_line}" >> "${trace_file}"
   [ -f "${trace_file}" ]
   if command -v jq &>/dev/null; then
@@ -285,7 +285,7 @@ teardown() {
   local ts="2026-05-08T00:00:00Z"
   local event_line
   # blocking posture: verify_fail event includes decision=refused
-  event_line="{\"ts\":\"${ts}\",\"event\":\"verify_fail\",\"message_id\":\"${thread_id}\",\"thread_id\":\"${thread_id}\",\"from\":\"unknown-eidolon@9.9.9\",\"to\":\"vivi@3.4\",\"integrity_method\":\"sha256\",\"verify_failure_code\":\"UNDECLARED_EDGE\",\"decision\":\"refused\"}"
+  event_line="{\"ts\":\"${ts}\",\"event\":\"verify_fail\",\"message_id\":\"${thread_id}\",\"thread_id\":\"${thread_id}\",\"from\":\"unknown-eidolon@9.9.9\",\"to\":\"vivi@<version>\",\"integrity_method\":\"sha256\",\"verify_failure_code\":\"UNDECLARED_EDGE\",\"decision\":\"refused\"}"
   printf '%s\n' "${event_line}" >> "${trace_file}"
   [ -f "${trace_file}" ]
   if command -v jq &>/dev/null; then

@@ -1,8 +1,9 @@
 ---
 name: vivi-loop-native
 description: "Load in Vivi's V (Verify) phase. The core capability that distinguishes Vivi from its predecessor APIVR-Δ: drive the closed, autonomous, bounded edit-run-test loop (`eidolons sandbox loop`) as its `--fix-hook`, consuming localized feedback, retrying in fresh context, refusing to game the tests, and gating on pass^k. Use whenever the task has an executable test oracle and a loop-competent host."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
+  phase: V-Verify
 ---
 
 # Loop-Native Verify Skill

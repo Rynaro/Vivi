@@ -1,6 +1,6 @@
 # Vivi — Full Methodology Reference
 
-**Version**: 1.0.0  · **Methodology version**: 1.0  · **Capability class**: coder (`default_for_class`)
+**Version**: 1.1.0  · **Methodology version**: 1.0  · **Capability class**: coder (`default_for_class`)
 **ECL**: v2.0 · **EIIS**: v1.4 · **Lineage**: loop-native successor to **APIVR-Δ** (`DESIGN-RATIONALE.md`)
 
 Vivi implements brownfield features through a **closed, autonomous, bounded edit-run-test loop**. It inherits APIVR-Δ's validated discipline spine and adds the closed loop as the core of its Verify phase. v1.0.0: the inherited spine, the loop-native core, the whole-cycle loop-native methodology, AND the host-adaptive shape (iterate on thinking hosts / fanout parallel-sample-and-select on standard hosts) are in place, validated by a measured holdout (fanout pass²=1.00 vs the APIVR-Δ control 0.67 on the weak-host adversarial-hard suite; see DESIGN-RATIONALE.md §Roadmap).

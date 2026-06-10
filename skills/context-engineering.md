@@ -1,8 +1,9 @@
 ---
 name: vivi-context-engineering
 description: "Load at the start of the Vivi Analyze phase. Techniques for building a repo map, running progressive disclosure, and maximising context relevance for coding tasks. Use whenever you need to understand unfamiliar code before editing it, or when an existing Discovery Report feels under-grounded."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
+  phase: A-Analyze
 ---
 
 # Context Engineering Skill
