@@ -8,6 +8,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+## [1.1.2] — 2026-06-10 — broad Bash allowlist (loop-native mandate)
+
+### Changed
+- **tools line: enumerated Bash prefixes → `Bash` (broad).** Vivi's loop-native mandate requires driving `eidolons sandbox loop` as the fix-hook and invoking arbitrary project verifiers (make, bats, shellcheck, npm, cargo, etc.) that vary per consumer repo. Enumerated Bash prefixes (`Bash(git:*)`, `Bash(jest:*)`, …) are incompatible with this mandate and have caused breakage three times across the ecosystem. Broad `Bash` is the correct boundary; boundary-respect lives in Vivi's methodology (P0 invariants), not in a Bash prefix allowlist. D3 also retires PARENT_FILLS_* placeholders — Vivi computes its own ECL envelope `sha256`/`size_bytes` via `shasum`/`wc` under broad Bash. Updated in `install.sh` heredoc and the checked-in `.claude/agents/vivi.md`.
+
 ## [1.1.1] — 2026-06-10 — SPEC lint-gate pointer (nexus doctor D11 advisory)
 
 ### Added
