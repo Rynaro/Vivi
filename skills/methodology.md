@@ -1,11 +1,11 @@
 ---
 name: vivi-methodology
 description: "Full Vivi cycle reference — A(nalyze) → P(lan) → I(mplement) → V(erify) → Δ(Delta)/R(eflect). Use when the task is a non-trivial feature implementation in a brownfield codebase and you need the complete methodology reference: complexity routing, evidence-grounded planning rules, test-anchoring requirements, and failure-escalation thresholds."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
 ---
 
-# Vivi Methodology v3.0
+# Vivi Methodology
 
 Feature implementation through evidence-grounded planning, test-anchored development, and structured self-improvement in brownfield codebases.
 
@@ -534,4 +534,4 @@ files per `skills/memory-management.md §Standalone Fallback`.
 
 ---
 
-*Vivi Methodology v3.0 — Flow-engineered, test-anchored, context-aware*
+*Vivi Methodology — Flow-engineered, test-anchored, context-aware*

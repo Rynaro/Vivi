@@ -3,7 +3,7 @@ set -euo pipefail
 
 EIDOLON_NAME="vivi"
 EIDOLON_SLUG="vivi"
-EIDOLON_VERSION="1.0.0"
+EIDOLON_VERSION="1.1.0"
 METHODOLOGY="Vivi"
 ECL_VERSION_VAL="1.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -438,9 +438,10 @@ Cycle:     A (Analyze) → P (Plan) → I (Implement) → V (Verify) → Δ (Del
     fi
   }
 
-  # Emit per-skill files for all 6 skills (flat layout, EIIS v1.3 §4.2.4.3).
+  # Emit per-skill files for all 7 skills (flat layout, EIIS v1.3 §4.2.4.3).
   wire_skill "context-engineering"
   wire_skill "failure-recovery"
+  wire_skill "loop-native"
   wire_skill "memory-management"
   wire_skill "methodology"
   wire_skill "parallel-tracks"
@@ -640,6 +641,7 @@ if [[ "$DRY_RUN" != "true" && -d "$TARGET" ]]; then
   add_fw "SPEC.md"                         "spec"          "created"
   add_fw "skills/context-engineering.md"   "skill"       "created"
   add_fw "skills/failure-recovery.md"      "skill"       "created"
+  add_fw "skills/loop-native.md"           "skill"       "created"
   add_fw "skills/memory-management.md"     "skill"       "created"
   add_fw "skills/methodology.md"           "skill"       "created"
   add_fw "skills/parallel-tracks.md"       "skill"       "created"
@@ -664,6 +666,7 @@ if [[ "$DRY_RUN" != "true" && -d "$TARGET" ]]; then
   }
   add_skill "context-engineering"
   add_skill "failure-recovery"
+  add_skill "loop-native"
   add_skill "memory-management"
   add_skill "methodology"
   add_skill "parallel-tracks"

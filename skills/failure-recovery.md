@@ -1,8 +1,9 @@
 ---
 name: vivi-failure-recovery
 description: "Load when the Vivi Verify phase produces failures — test fails, lint error, build break, or three consecutive unsuccessful attempts at the same category. Provides the failure classification taxonomy, bounded debugging protocol, and escalation thresholds. Use to avoid the 'random retries' anti-pattern."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
+  phase: V-Verify
 ---
 
 # Failure Recovery Skill

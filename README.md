@@ -24,7 +24,7 @@ Vivi is the **default `coder`**; APIVR-Δ is retained as the **conservative fall
 
 ## Status
 
-**v1.0.0.** The inherited spine, the loop-native core, the whole-cycle methodology, and the **host-adaptive shape** (iterate / fanout) are in place — validated by a measured holdout: on the weak-host adversarial-hard suite (haiku, k=2, budget-matched), fanout-Vivi scored **pass² = 1.00 vs 0.67** for both the APIVR-Δ control and the iterate ablation. See `DESIGN-RATIONALE.md` and `Rynaro/vivi-measurement` RESULTS.md §Stage 2.
+**v1.1.0.** The inherited spine, the loop-native core, the whole-cycle methodology, and the **host-adaptive shape** (iterate / fanout) are in place — validated by a measured holdout: on the weak-host adversarial-hard suite (haiku, k=2, budget-matched), fanout-Vivi scored **pass² = 1.00 vs 0.67** for both the APIVR-Δ control and the iterate ablation. See `DESIGN-RATIONALE.md` and `Rynaro/vivi-measurement` RESULTS.md §Stage 2.
 
 ## Install
 

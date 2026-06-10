@@ -2,7 +2,7 @@
 
 **Vivi** is the Eidolons coding member: brownfield feature implementation through a **closed, autonomous, bounded edit-run-test loop**. Loop-native successor to **APIVR-Δ** — Vivi inherits APIVR-Δ's validated discipline spine (Internal-First, anti-overfit test-anchoring, bounded recovery, diff-not-apply) and adds the closed loop the 2025-26 evidence makes decisive. Lineage + rationale: `DESIGN-RATIONALE.md`.
 
-## Cycle (v0.1) — A → P → I → V → Δ/R, loop-native
+## Cycle — A → P → I → V → Δ/R, loop-native
 - **A — Analyze**: CRYSTALIUM recall → repo map → requirements → asset discovery (Internal-First).
 - **P — Plan**: test-anchors from acceptance criteria (anti-overfit; never reverse-engineered from a candidate impl) → scored strategies → selection.
 - **I — Implement**: USE → EXTEND → WRAP → CREATE; minimal targeted diffs.

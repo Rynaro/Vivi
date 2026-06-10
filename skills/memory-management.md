@@ -1,8 +1,8 @@
 ---
 name: vivi-memory-management
 description: "Load at Vivi session start, session end, or when you notice a repeating pattern across tasks. CRYSTALIUM-primary memory protocol: when mcp__crystalium__* tools are available, route ALL memory through CRYSTALIUM (recall/commit/ingest/plan_checkpoint/session_end). The local agents/memories/*.md files are the standalone fallback for when CRYSTALIUM is absent — EIIS conformance. Never write both."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
 ---
 
 # Memory Management Skill

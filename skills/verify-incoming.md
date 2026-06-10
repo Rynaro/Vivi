@@ -1,8 +1,8 @@
 ---
 name: vivi-verify-incoming
 description: "Load when reading any upstream artefact handed off to Vivi that carries a sibling .envelope.json. BLOCKING per ECL §6.2.2: the orchestrator MUST have verified the envelope's SHA-256 (eidolons verify-envelope --block / eidolons run --verify) and recorded a verify_pass before dispatch. If no verify_pass exists for the message_id, or a verify_fail is present, REFUSE to process the payload and hand back to the orchestrator. Symmetric receiver gate — every Eidolon enforces it identically."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
 ---
 
 # Verify-Incoming Skill — Vivi (blocking, symmetric)
@@ -149,12 +149,12 @@ envelope is unparseable, use `unknown`.
 
 **verify_pass:**
 ```json
-{"ts":"<RFC3339>","event":"verify_pass","message_id":"<uuid>","thread_id":"<uuid>","from":"<eidolon>@<version>","to":"vivi@3.4","performative":"<performative>","integrity_method":"sha256"}
+{"ts":"<RFC3339>","event":"verify_pass","message_id":"<uuid>","thread_id":"<uuid>","from":"<eidolon>@<version>","to":"vivi@<version>","performative":"<performative>","integrity_method":"sha256"}
 ```
 
 **verify_fail:**
 ```json
-{"ts":"<RFC3339>","event":"verify_fail","message_id":"<uuid>","thread_id":"<uuid>","from":"<eidolon>@<version>","to":"vivi@3.4","integrity_method":"sha256","verify_failure_code":"<CODE>","decision":"refused"}
+{"ts":"<RFC3339>","event":"verify_fail","message_id":"<uuid>","thread_id":"<uuid>","from":"<eidolon>@<version>","to":"vivi@<version>","integrity_method":"sha256","verify_failure_code":"<CODE>","decision":"refused"}
 ```
 
 ---

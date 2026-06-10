@@ -1,8 +1,9 @@
 ---
 name: vivi-parallel-tracks
 description: "Load ONLY under TRANCE authorization when the Plan phase yields N independent, non-overlapping implementation tracks (disjoint file sets). Operationalizes the TRANCE G4 form — parallel multi-track implementation in mandatory git-worktree isolation, max 5 clean-context tracks, a per-track verifier cascade, a non-fungible per-track ≤3 reflection budget, explicit stop conditions, and a single-threaded merge/aggregation step. Absent TRANCE gating, Vivi runs exactly as today: single-track A→P→I→V→Δ/R."
-methodology: Vivi
-methodology_version: "1.0"
+metadata:
+  methodology: Vivi
+  phase: TRANCE-G4
 ---
 
 # Parallel Multi-Track Mode (TRANCE G4)

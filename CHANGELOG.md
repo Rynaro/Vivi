@@ -8,6 +8,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-06-10 — loop-native wiring fix + stamp hygiene + canonical skill template
+
+### Fixed
+- **FUNCTIONAL BUG: `skills/loop-native.md` was never wired by `install.sh`.** Consumers installing Vivi v1.0.0 received 6 skills but were missing Vivi's core skill — the loop-native verify capability that distinguishes Vivi from APIVR-Δ. Added `wire_skill "loop-native"`, `add_fw "skills/loop-native.md"`, and `add_skill "loop-native"` to install.sh; updated examples/install.manifest.json to include loop-native (and parallel-tracks) in both `files_written[]` and `skills[]`.
+
+### Changed
+- **Stamp hygiene (inherited 3.x values corrected):** `EIDOLON_VERSION` bumped to 1.1.0 in install.sh, AGENTS.md, SPEC.md, README. Schemas `$id` URLs updated from `blob/v3.1.0/` to `blob/v1.1.0/`. Outbound template `from.version` and inbound fixture `to.version` updated from 3.1.0 to 1.1.0. Test helpers default updated. examples/install.manifest.json version updated from 3.3.0 to 1.1.0.
+- **Unversioned cycle headings:** `agent.md` `## Cycle (v0.1)` → `## Cycle`; `AGENTS.md` `## Vivi Cycle (v3.0)` → `## Vivi Cycle`; `skills/methodology.md` H1 + footer stripped of version string.
+- **Trace placeholder fix:** `verify-incoming.md` trace events `"to":"vivi@3.4"` → `"to":"vivi@<version>"`.
+- **Canonical skill frontmatter (D2):** All 7 skills migrated from top-level `methodology`/`methodology_version` to `metadata: { methodology, phase }` block; `methodology_version` dropped from all skills.
+- **docs/PAPER.md identity fix:** "Version 3.0 — February 2026" / "Vivi v3.0" corrected to "Version 1.0 — June 2026" / "Vivi v1.0" throughout.
+- **ECL untouched:** `ECL_VERSION_VAL`, `ECL_VERSION` file, and `envelope_version` values left verbatim (ecosystem V3 item, out of scope per campaign spec).
+
 ## [1.0.0] — 2026-06-09 — loop-native coder, host-adaptive, measurement-validated
 
 ### Added

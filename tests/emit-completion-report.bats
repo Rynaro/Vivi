@@ -4,7 +4,7 @@
 load helpers.bash
 
 setup() {
-  setup_envelope_fixture "vivi-completion-report" "vivi" "3.1.0"
+  setup_envelope_fixture "vivi-completion-report" "vivi" "1.1.0"
 }
 
 teardown() {

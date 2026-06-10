@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/Rynaro/Vivi/blob/v3.1.0/schemas/vivi-completion-report-profile.v1.json",
+  "$id": "https://github.com/Rynaro/Vivi/blob/v1.1.0/schemas/vivi-completion-report-profile.v1.json",
   "title": "ECL vivi-completion-report profile v1",
   "description": "Vendored from eidolons-ecl/schemas/per-eidolon/vivi-completion-report.v1.json (ECL v1.0.0). Vivi emit when work is complete; consumed by IDG. Contract: vivi-to-idg.yaml.",
   "allOf": [

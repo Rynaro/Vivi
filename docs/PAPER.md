@@ -1,12 +1,12 @@
 # Vivi: A Flow-Engineered Methodology for LLM-Based Feature Implementation in Brownfield Codebases
 
-**Version 3.0 — February 2026**
+**Version 1.0 — June 2026**
 
 ---
 
 ## Abstract
 
-Large Language Model (LLM) coding agents have demonstrated remarkable capability on isolated programming tasks, yet consistently underperform on brownfield feature implementation — the dominant mode of professional software engineering. We present Vivi v3.0, a flow-engineered methodology that structures LLM agent behavior through five explicit phases: **A**nalyze, **P**lan, **I**mplement, **V**erify, and **Δ** Delta (with a **R**eflect branch for failure recovery). The methodology synthesizes techniques from five distinct schools of thought in agentic coding — flow engineering, minimal scaffolding, tree search, role-separated multi-agent systems, and context engineering — into a unified, implementable framework.
+Large Language Model (LLM) coding agents have demonstrated remarkable capability on isolated programming tasks, yet consistently underperform on brownfield feature implementation — the dominant mode of professional software engineering. We present Vivi v1.0, a flow-engineered methodology that structures LLM agent behavior through five explicit phases: **A**nalyze, **P**lan, **I**mplement, **V**erify, and **Δ** Delta (with a **R**eflect branch for failure recovery). The methodology synthesizes techniques from five distinct schools of thought in agentic coding — flow engineering, minimal scaffolding, tree search, role-separated multi-agent systems, and context engineering — into a unified, implementable framework.
 
 Rather than relying on runtime orchestration libraries or custom agent harnesses, Vivi operates as a declarative specification: a set of markdown instruction files that any LLM-based coding tool can consume. The methodology introduces four key augmentations over prior work: (1) a complexity router that adapts pipeline depth to task difficulty, drawing on adaptive structuring research; (2) test-anchor generation before implementation, informed by AlphaCodium's flow engineering; (3) an evidence-gated failure recovery protocol with structured classification, based on the AgentDebug taxonomy; and (4) a persistent episodic memory system with consolidation rules, extending the Reflexion framework to multi-session workflows.
 
@@ -55,7 +55,7 @@ Vivi addresses this gap by providing a structured methodology specifically desig
 
 The core insight driving this work is that **the structure of the reasoning pipeline — not the capability of the underlying model — is the primary determinant of quality for complex coding tasks**. This claim is supported by AlphaCodium's finding that pipeline design accounted for approximately 95% of their optimization effort [2], by SWE-Agent's demonstration that interface design matches reasoning algorithms in importance [3], and by the Agentless framework's achievement of competitive SWE-bench scores with a deliberately simple three-phase pipeline [4].
 
-Vivi v3.0 represents the third major iteration of this methodology, informed by a systematic review of the academic literature on LLM-based code generation and agent architectures, analysis of the commercial agent landscape (including leaked and published system prompts from major tools), and community-reported best practices from over 2,500 repositories analyzed by GitHub [7].
+Vivi v1.0 represents the third major iteration of this methodology, informed by a systematic review of the academic literature on LLM-based code generation and agent architectures, analysis of the commercial agent landscape (including leaked and published system prompts from major tools), and community-reported best practices from over 2,500 repositories analyzed by GitHub [7].
 
 ---
 
@@ -283,7 +283,7 @@ The consolidation protocol is designed to prevent the error proliferation that X
 
 ## 5. Design Rationale: Mapping Decisions to Evidence
 
-Each significant design decision in Vivi v3.0 can be traced to specific evidence in the literature. The following table provides this mapping.
+Each significant design decision in Vivi v1.0 can be traced to specific evidence in the literature. The following table provides this mapping.
 
 | Design Decision | Supporting Evidence | Alternative Considered | Reason for Rejection |
 |---|---|---|---|
@@ -310,7 +310,7 @@ Each significant design decision in Vivi v3.0 can be traced to specific evidence
 
 The following comparison positions Vivi against the most relevant existing methodologies and tools. We compare structural features only; we do not claim benchmark superiority, as Vivi has not been evaluated on standardized benchmarks.
 
-| Feature | Vivi v3.0 | AlphaCodium [2] | Agentless [4] | SWE-Agent [3] | Claude Code [14] | GitHub Spec Kit [12] | MapCoder [17] |
+| Feature | Vivi v1.0 | AlphaCodium [2] | Agentless [4] | SWE-Agent [3] | Claude Code [14] | GitHub Spec Kit [12] | MapCoder [17] |
 |---|---|---|---|---|---|---|---|
 | **Designed for** | Brownfield features | Contest problems | Bug fixing | Bug fixing | General coding | Feature implementation | Contest problems |
 | **Phase structure** | 5 phases + reflect | 2 phases (pre-process + iterate) | 3 phases (localize + repair + validate) | Agent loop | Agent loop | 4 phases (spec + plan + tasks + implement) | 4 agents (retrieve + plan + code + debug) |
@@ -389,7 +389,7 @@ Several directions are apparent.
 
 ## 9. Conclusion
 
-Vivi v3.0 represents an attempt to codify the best available evidence on how LLM coding agents should reason about and implement features in existing codebases. The methodology synthesizes flow engineering from AlphaCodium, interface design principles from SWE-Agent, bounded exploration from tree search research, role separation from Aider, context management from Augment Code and Aider, failure recovery from AgentDebug and LDB, and episodic memory from Reflexion into a unified, tool-agnostic framework.
+Vivi v1.0 represents an attempt to codify the best available evidence on how LLM coding agents should reason about and implement features in existing codebases. The methodology synthesizes flow engineering from AlphaCodium, interface design principles from SWE-Agent, bounded exploration from tree search research, role separation from Aider, context management from Augment Code and Aider, failure recovery from AgentDebug and LDB, and episodic memory from Reflexion into a unified, tool-agnostic framework.
 
 The key contributions are: a complexity router that prevents over-engineering simple tasks, mandatory asset discovery that enforces reuse over creation, test-anchor generation that shifts verification left, evidence-gated failure recovery that prevents speculative fixes, and persistent episodic memory that enables cross-session learning.
 
@@ -483,5 +483,5 @@ The broader observation motivating this work is that **the gap between AI coding
 
 ---
 
-*Vivi v3.0 — February 2026*
+*Vivi v1.0 — June 2026*
 *This paper documents the design rationale and evidence base for the Vivi methodology. It is not a peer-reviewed publication. All cited benchmark results are attributed to their original authors and have not been independently reproduced by the authors of this methodology.*
