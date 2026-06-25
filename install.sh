@@ -3,7 +3,7 @@ set -euo pipefail
 
 EIDOLON_NAME="vivi"
 EIDOLON_SLUG="vivi"
-EIDOLON_VERSION="1.1.2"
+EIDOLON_VERSION="1.2.0"
 METHODOLOGY="Vivi"
 ECL_VERSION_VAL="1.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -438,7 +438,7 @@ Cycle:     A (Analyze) → P (Plan) → I (Implement) → V (Verify) → Δ (Del
     fi
   }
 
-  # Emit per-skill files for all 7 skills (flat layout, EIIS v1.3 §4.2.4.3).
+  # Emit per-skill files for all 8 skills (flat layout, EIIS v1.3 §4.2.4.3).
   wire_skill "context-engineering"
   wire_skill "failure-recovery"
   wire_skill "loop-native"
@@ -446,6 +446,7 @@ Cycle:     A (Analyze) → P (Plan) → I (Implement) → V (Verify) → Δ (Del
   wire_skill "methodology"
   wire_skill "parallel-tracks"
   wire_skill "verify-incoming"
+  wire_skill "esl-hop"
 
   # AGENTS.md — opt-in shared dispatch only.
   [[ "$SHARED_DISPATCH" == "true" ]] && upsert_eidolon_block "AGENTS.md" "$SHARED_BLOCK"
@@ -646,6 +647,7 @@ if [[ "$DRY_RUN" != "true" && -d "$TARGET" ]]; then
   add_fw "skills/methodology.md"           "skill"       "created"
   add_fw "skills/parallel-tracks.md"       "skill"       "created"
   add_fw "skills/verify-incoming.md"       "skill"       "created"
+  add_fw "skills/esl-hop.md"               "skill"       "created"
 
   # Build skills[] EIIS v1.3 §4.2.4 dual-write records.
   sk=""
@@ -671,6 +673,7 @@ if [[ "$DRY_RUN" != "true" && -d "$TARGET" ]]; then
   add_skill "methodology"
   add_skill "parallel-tracks"
   add_skill "verify-incoming"
+  add_skill "esl-hop"
   skills_json="[${sk%,}]"
   add_fw "templates/discovery-report.md" "template"   "created"
   add_fw "templates/execution-plan.md"  "template"    "created"

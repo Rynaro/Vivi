@@ -27,5 +27,6 @@
 | `skills/memory-management.md` | CRYSTALIUM-primary memory protocol |
 | `skills/parallel-tracks.md` | TRANCE G4 parallel multi-track (gated) |
 | `skills/verify-incoming.md` | inbound ECL envelope verification (blocking) |
+| `skills/esl-hop.md` | ESL implement hop — MAKER at `in_progress` (tonberry; opt-in) |
 
 Full spec: `SPEC.md`. ECL v2.0; EIIS v1.4. Capability class: `coder` (`default_for_class`). Refuses: greenfield, novel architecture. Upstream: ATLAS, SPECTRA · downstream: IDG · lateral: FORGE, VIGIL.
