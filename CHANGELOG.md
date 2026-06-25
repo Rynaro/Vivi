@@ -8,6 +8,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-06-25 — ESL lifecycle-hop adoption (MAKER at `in_progress`)
+
+### Added
+- **`skills/esl-hop.md` — ESL implement-hop skill (opt-in).** In an ESL-enabled project (`mcp__tonberry__*` available), when the cortex routes a non-trivial change to Vivi at `in_progress`, Vivi is the **MAKER**: it declares `has_code` via `mcp__tonberry__transition --to_status in_progress --has_code true` (persists by default in tonberry v0.4.0), implements via its loop-native A→P→I→V→Δ/R cycle in an isolated worktree (`change.json.maker == vivi`), and on green hands off to the **CHECKER** (Kupo at `verified`, VIGIL on failure) — Vivi does **NOT self-verify** (maker ≠ checker is mechanically enforced by tonberry's C4). References the nexus cortex `methodology/cortex/esl-protocol.md` for the full lifecycle. **Graceful skip:** absent tonberry, Vivi implements normally — ESL is opt-in and Vivi remains EIIS-standalone-conformant. Wired into `install.sh` (`wire_skill`/`add_fw`/`add_skill`), `agent.md` + `SPEC.md` skill indices, and `examples/install.manifest.json` (`skills[]` + `files_written[]`, role `skill`) so the I5 manifest-skill-ref gate and the strict canonical-inventory sweep both pass.
+
+### Changed
+- **Version stamp 1.1.2 → 1.2.0** in `install.sh` (`EIDOLON_VERSION`), `agent.md`-adjacent `AGENTS.md` frontmatter, `SPEC.md`, `examples/install.manifest.json`, and the `tests/install.bats` version assertion.
+
 ## [1.1.2] — 2026-06-10 — broad Bash allowlist (loop-native mandate)
 
 ### Changed
