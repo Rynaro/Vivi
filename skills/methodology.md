@@ -224,7 +224,7 @@ mcp__crystalium__plan_replan(
 
 ### ECL emit on FORGE consultation
 
-If Plan-phase reasoning calls for a FORGE consultation (adversarial reasoning, trade-off arbitration), emit a `reasoning-request.envelope.json` next to the question artefact (template at `templates/reasoning-request.envelope.json`). Required: `to.eidolon=forge`, `performative=REQUEST`, `artifact.kind=reasoning-request`. Body validates against `schemas/_base-profile.v1.json`. Skip the envelope when `ECL_VERSION` is absent.
+If Plan-phase reasoning calls for a FORGE consultation (adversarial reasoning, trade-off arbitration), emit a `reasoning-request.envelope.json` next to the question artefact (template at `templates/reasoning-request.envelope.json`). Required: `to.eidolon=forge`, `performative=REQUEST`, `artifact.kind=reasoning-request`. Body validates against `schemas/_base-profile.v1.json`. `ise.assertion_grade="self-attested"` (ECL v2.0 §6.5.2; this envelope precedes any loop-native verification — see `skills/loop-native.md` §6 for the grade rationale). Skip the envelope when `ECL_VERSION` is absent.
 
 ---
 
@@ -306,7 +306,7 @@ Run tests incrementally, not all at once:
 
 ### ECL emit on Implement-phase exit
 
-On phase exit, emit `vivi-completion-report.envelope.json` next to the completion artefact (template at `templates/vivi-completion-report.envelope.json`). Required: `to.eidolon=idg`, `performative=PROPOSE`, `artifact.kind=vivi-completion-report`, `integrity.method=sha256` matching the payload bytes. Profile schema: `schemas/vivi-completion-report-profile.v1.json` (required keys: `files_changed_count`, `tests_run`, `tests_passed`). Skip when `ECL_VERSION` is absent.
+On phase exit, emit `vivi-completion-report.envelope.json` next to the completion artefact (template at `templates/vivi-completion-report.envelope.json`). Required: `to.eidolon=idg`, `performative=PROPOSE`, `artifact.kind=vivi-completion-report`, `integrity.method=sha256` matching the payload bytes. Profile schema: `schemas/vivi-completion-report-profile.v1.json` (required keys: `files_changed_count`, `tests_run`, `tests_passed`). `ise.assertion_grade="validated"` (ECL v2.0 §6.5.2) — justified because this envelope is only reachable after the V-phase closed loop passed **pass^k** against the regression + anchoring tests (`skills/loop-native.md` §4, §6); that is the spec-mandated verification gate the `validated` grade requires, not a self-report. Skip when `ECL_VERSION` is absent.
 
 After the envelope is produced and verified (V-VERIFY phase), ingest it into
 CRYSTALIUM (if available):
@@ -421,7 +421,9 @@ whichever trips first), wrap the escalation in a `repair-failed-report.envelope.
 `to.eidolon=vigil`, `performative=ESCALATE`, `trust_level=high`,
 `assumptions[0]="trigger: 3-failure-same-category"`. Profile schema:
 `schemas/repair-failed-report-profile.v1.json` (keys `attempts>=3`,
-`failure_category`, `last_test_command`). Skip the sidecar when `ECL_VERSION` is
+`failure_category`, `last_test_command`). `ise.assertion_grade="self-attested"`
+(ECL v2.0 §6.5.2) — the escalation is Vivi's own bounded-failure judgement, not
+an externally-gated pass. Skip the sidecar when `ECL_VERSION` is
 absent (the escalation still happens).
 
 ### Failure Protocol (fresh-context, localized)

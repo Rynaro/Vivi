@@ -49,6 +49,16 @@ the same base tree + the same localized base-failure feedback; the SUBSTRATE
 selects the survivor externally (tests + pass^k + sealed holdout + judge). The
 model never judges its own retry.
 
+> **Declared, not just prose (`roster/routing.yaml` 1.1).** The above host-tier
+> branch is no longer methodology guidance alone — the nexus roster encodes it
+> as DATA. `roster/routing.yaml` declares `vivi.degraded_mode: fanout`: FANOUT
+> is the declared default loop shape on a weak or undeclared host tier. It also
+> declares `vivi.fallback: apivr`: the kernel's **S1.7 host-tier gate**
+> (`cli/src/run.sh`) routes to APIVR-Δ as the *declared* conservative peer
+> (`fallthrough_reason: "declared-fallback"`) when the gate trips, rather than
+> a generic next-ranked pick. This skill's ITERATE/FANOUT split is Vivi's
+> in-loop implementation of the same shape the kernel already dispatches on.
+
 The substrate owns the bounded control flow, isolation, diff-not-apply, and the VIGIL escalation; **Vivi owns the reasoning inside `--fix-hook`.** The nexus never edits or merges.
 
 ## 2 — Each `--fix-hook` invocation: fresh context, localized feedback
@@ -142,11 +152,13 @@ A single green run is necessary but not sufficient. With `--k > 1`, a candidate 
 
 ## 5 — Escalation (bounded; reconciled)
 
-Vivi's methodology owns the **≤3-same-category** retry budget (the authority); the substrate's `--max-attempts` is the ceiling. Whichever trips first ends the loop and emits the existing ECL `repair-failed-report` to **VIGIL** (no new performative; the closed 10-set is preserved). Provide the localized feedback + the candidate diff in the hand-off. **Oscillation flag (backported from the APIVR-Δ spine):** if the attempts alternated between two states (fix A breaks test B, fix B breaks test A — same loci flip-flopping across feedback), set `loop_detected: true` in the report payload so VIGIL starts from the oscillation, not from the last symptom.
+Vivi's methodology owns the **≤3-same-category** retry budget (the authority); the substrate's `--max-attempts` is the ceiling. Whichever trips first ends the loop and emits the existing ECL `repair-failed-report` to **VIGIL** (no new performative; the closed 10-set is preserved). Provide the localized feedback + the candidate diff in the hand-off. **Oscillation flag (backported from the APIVR-Δ spine):** if the attempts alternated between two states (fix A breaks test B, fix B breaks test A — same loci flip-flopping across feedback), set `loop_detected: true` in the report payload so VIGIL starts from the oscillation, not from the last symptom. ISE sidecar: `ise.assertion_grade="self-attested"` (ECL v2.0 §6.5.2) — the escalation is Vivi's own bounded-failure judgement, not an externally-gated pass.
 
 ## 6 — Output
 
 On success: the loop emits a **candidate diff** for review — Vivi does **not** apply or merge it (diff-not-apply; the human apply-gate is aligned with governed-autonomy). Emit the `vivi-completion-report` ECL envelope to IDG. On cap-out: the VIGIL hand-off above.
+
+**ISE grade on the completion envelope (ECL v2.0 §6.5.2).** `vivi-completion-report` sets `ise.assertion_grade="validated"` — this is the ONLY one of Vivi's three envelope kinds that earns it, because it is the only one gated by pass^k (§4): the loop only reaches this exit after the candidate passed the substrate's spec-mandated regression-first-then-reproduction verification `k` times over, external to Vivi's own say-so. That is precisely what `validated` requires ("emitter ran spec-mandated gates") — it is not a self-report. `reasoning-request` and `repair-failed-report` are `self-attested`: neither exits through the pass^k gate (one precedes verification, the other is the verification failing out). All three set `ise.receiver_authorization = {auto_route: true, auto_merge: false, auto_deploy: false}` — diff-not-apply means Vivi never authorizes a receiver to merge or deploy on its behalf.
 
 **Mandatory post-pass^k commit (S1.9).** Immediately after `final="passed"` (pass^k-green confirmed), Vivi MUST call `mcp__crystalium__commit(layer=procedural, ...)` as specified in `skills/memory-management.md §Mandatory Post-pass^k Commit`. This is NOT discretionary — it is a methodology obligation on every successful loop exit. The verified fix-pattern (diff + anchoring tests + failure_signature) is the most reliable learning signal available; committing it makes it available for future Vivi sessions and for VIGIL cross-Eidolon pattern reuse. **ADAPTER-NOT-ENGINE: the CODER (Vivi) issues this call; sandbox.sh never does.**
 

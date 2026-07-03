@@ -12,16 +12,20 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
   [[ "$output" =~ ^[0-9]+\.[0-9]+ ]]
 }
 
-@test "install.sh declares EIDOLON_VERSION 1.2.0" {
-  grep -q 'EIDOLON_VERSION="1.2.0"' "${REPO_ROOT}/install.sh"
+@test "install.sh declares EIDOLON_VERSION 1.3.0" {
+  grep -q 'EIDOLON_VERSION="1.3.0"' "${REPO_ROOT}/install.sh"
 }
 
 @test "install.sh declares ECL_VERSION_VAL" {
-  grep -q 'ECL_VERSION_VAL="1.0"' "${REPO_ROOT}/install.sh"
+  grep -q 'ECL_VERSION_VAL="2.0"' "${REPO_ROOT}/install.sh"
 }
 
 @test "schemas directory contains ecl-envelope.v1.json" {
   [ -f "${REPO_ROOT}/schemas/ecl-envelope.v1.json" ]
+}
+
+@test "schemas directory contains ecl-envelope.v2.json" {
+  [ -f "${REPO_ROOT}/schemas/ecl-envelope.v2.json" ]
 }
 
 @test "schemas directory contains all six profile schemas" {
@@ -96,8 +100,8 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
   [[ "$output" == "trigger: 3-failure-same-category" ]]
 }
 
-@test "install.sh references comm field with envelope_version 1.0" {
-  grep -q 'ECL_VERSION_VAL="1.0"' "${REPO_ROOT}/install.sh"
+@test "install.sh references comm field with envelope_version 2.0" {
+  grep -q 'ECL_VERSION_VAL="2.0"' "${REPO_ROOT}/install.sh"
   grep -q 'envelope_version.*ECL_VERSION_VAL' "${REPO_ROOT}/install.sh"
 }
 

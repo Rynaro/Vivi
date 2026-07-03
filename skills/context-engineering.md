@@ -327,7 +327,7 @@ Before reading a full file, try these cheaper approaches:
 
 ---
 
-## Verify Upstream Envelopes (ECL v1.0)
+## Verify Upstream Envelopes (ECL v2.0)
 
 When the Analyze phase ingests an artefact handed off by ATLAS (`scout-report`), SPECTRA (`spec`), VIGIL (`root-cause-report`), or FORGE (`reasoning-report`), check for a sibling `${P%.*}.envelope.json` next to the payload.
 
@@ -336,7 +336,7 @@ If present:
 1. Load `skills/verify-incoming.md`.
 2. Run the validation pipeline (schema → integrity → contract match).
 3. On `verify_pass`, proceed.
-4. On `verify_fail`, emit the warning to stderr, append the failure code to `.eidolons/.trace/<thread_id>.jsonl`, **and continue** — verification is opt-in / warn-only at ECL v1.0.
+4. On `verify_fail`, emit the warning to stderr, append the failure code to `.eidolons/.trace/<thread_id>.jsonl`, **and continue** — verification is opt-in / warn-only at ECL v2.0.
 
 If the sibling envelope is absent, proceed without verification. This is expected during the ECL rollout window when upstream Eidolons may not yet have adopted.
 
