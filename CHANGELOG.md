@@ -8,6 +8,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-07-03 — ECL v2.0 adoption (ISE trust-hierarchy, drift kill)
+
+### Added
+- **ECL v2.0 vendoring.** `schemas/ecl-envelope.v2.json` — self-contained vendored copy of `eidolons-ecl@v2.0.0`'s `schemas/envelope.v2.json` (spec/ecl-2.0.md §6.5), following the same inlined-enum, self-contained convention as the existing `schemas/ecl-envelope.v1.json`. The v1 file is **retained**, not replaced — Vivi's own tooling can still validate a v1.x sidecar received during the ECL §7.3 compatibility window (through 2027-05-13). Wired into `install.sh` (`do_cp` + `add_fw`, role `other`).
+- **ISE (Intent, Source, Entitlement) emission on all three outbound envelope templates** (ECL v2.0 §6.5). `templates/vivi-completion-report.envelope.json` sets `ise.assertion_grade="validated"` — the only one of Vivi's three kinds that earns it, because it is the only exit gated by the loop-native V-phase's pass^k verification (`skills/loop-native.md` §4, §6 — spec-mandated gates, not a self-report). `templates/reasoning-request.envelope.json` and `templates/repair-failed-report.envelope.json` set `ise.assertion_grade="self-attested"` (neither exits through the pass^k gate). All three set `ise.receiver_authorization = {auto_route:true, auto_merge:false, auto_deploy:false}` and `ise.provenance.methodology_version="vivi-1.3.0"`. Justification documented in `skills/loop-native.md` §6 and cross-referenced from `skills/methodology.md`'s three "ECL emit" sections (not embedded as a JSON field, to avoid polluting every real emission).
+
+### Changed
+- **ECL prose drift kill (all → v2.0).** `CLAUDE.md`, `skills/failure-recovery.md`, `skills/context-engineering.md` referenced "ECL v1.0" in section headers/prose while `agent.md`, `SPEC.md`, and `skills/memory-management.md` already said "ECL v2.0" — reconciled to v2.0 throughout. `install.sh` `ECL_VERSION_VAL` `"1.0"` → `"2.0"` (was drifted from the already-v2.0 `ECL_VERSION` file it also copies). All 7 envelope templates (3 outbound + 4 inbound fixtures) `envelope_version` `"1.0"` → `"2.0"`. `schemas/install.manifest.v1.json` `comm.envelope_version` pattern widened `^1\.0(\.\d+)?$` → `^(1\.[012]|2\.0)(\.\d+)?$` (was load-bearing — would have rejected Vivi's own "2.0" manifest declaration) and its §7.2 citation bumped. `examples/install.manifest.json` `comm.envelope_version` `"1.0"` → `"2.0"`.
+- **Canonical verify-incoming convergence with `../Kupo`.** `skills/verify-incoming.md` failure-code list gains `CONTEXT_OVER_BUDGET` and `MISSING_REQUIRED_SECTION` (ECL v2.0 §5.3 canonical set; Kupo already listed both). "All six Eidolons ship this gate" → "All Eidolons in the roster ship this gate" (Kupo's phrasing; the "six" count was stale). Vivi's per-Eidolon accepted-artifact table is unchanged.
+- **Degraded-mode prose, additive (`skills/loop-native.md` §1).** The ITERATE/FANOUT host-tier branch now states that the shape choice is DATA, not prose guidance alone: the nexus `roster/routing.yaml` (routing_version 1.1) declares `vivi.degraded_mode: fanout` (FANOUT is the declared default on a weak/undeclared host tier) and `vivi.fallback: apivr` (the kernel's S1.7 host-tier gate in `cli/src/run.sh` routes to APIVR-Δ as the *declared* conservative peer, `fallthrough_reason: "declared-fallback"`, rather than a generic next-ranked pick). Purely additive — the skill's structure and existing prose are unchanged.
+- **Version stamp 1.2.0 → 1.3.0** in the 5 canonical homes: `install.sh` (`EIDOLON_VERSION`), `AGENTS.md` frontmatter, `SPEC.md`, `examples/install.manifest.json`, and the `tests/install.bats` version assertion.
+
+### Tests
+- `tests/install.bats`: updated version/ECL-version assertions; added `ecl-envelope.v2.json` presence check.
+- New `tests/ecl-v2-adoption.bats`: v2 schema shape (ISE `$defs`, `envelope_version` pattern), ISE block presence + grade correctness on all three outbound templates (asserts `vivi-completion-report`'s `validated` grade differs from the other two `self-attested` templates), `receiver_authorization` shape, install.sh wiring, and drift-kill greps (no remaining "ECL v1.0" prose outside the retained v1 schema; all 7 templates declare `envelope_version: "2.0"`).
+
 ## [1.2.0] — 2026-06-25 — ESL lifecycle-hop adoption (MAKER at `in_progress`)
 
 ### Added

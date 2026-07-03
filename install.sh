@@ -3,9 +3,9 @@ set -euo pipefail
 
 EIDOLON_NAME="vivi"
 EIDOLON_SLUG="vivi"
-EIDOLON_VERSION="1.2.0"
+EIDOLON_VERSION="1.3.0"
 METHODOLOGY="Vivi"
-ECL_VERSION_VAL="1.0"
+ECL_VERSION_VAL="2.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Legacy v1.2-era artefacts swept by cleanup_legacy_v1_2 on upgrade.
@@ -364,12 +364,16 @@ if [[ "$MANIFEST_ONLY" != "true" ]]; then
   do_cp "${SCRIPT_DIR}/SPEC.md"   "${TARGET}/SPEC.md"
   do_cp_r "${SCRIPT_DIR}/templates" "${TARGET}/templates"
 
-  # --- ECL v1.0: copy ECL_VERSION marker ---
+  # --- ECL v2.0: copy ECL_VERSION marker ---
   do_cp "${SCRIPT_DIR}/ECL_VERSION" "${TARGET}/ECL_VERSION"
 
-  # --- ECL v1.0: copy vendored schemas ---
+  # --- ECL v2.0: copy vendored schemas ---
+  # ecl-envelope.v1.json is RETAINED alongside v2 (not replaced) so Vivi's own
+  # tooling can still validate a v1.x sidecar received during the ECL §7.3
+  # compatibility window (through 2027-05-13).
   do_cp "${SCRIPT_DIR}/schemas/install.manifest.v1.json"                "${TARGET}/schemas/install.manifest.v1.json"
   do_cp "${SCRIPT_DIR}/schemas/ecl-envelope.v1.json"                    "${TARGET}/schemas/ecl-envelope.v1.json"
+  do_cp "${SCRIPT_DIR}/schemas/ecl-envelope.v2.json"                    "${TARGET}/schemas/ecl-envelope.v2.json"
   do_cp "${SCRIPT_DIR}/schemas/_base-profile.v1.json"                   "${TARGET}/schemas/_base-profile.v1.json"
   do_cp "${SCRIPT_DIR}/schemas/vivi-completion-report-profile.v1.json" "${TARGET}/schemas/vivi-completion-report-profile.v1.json"
   do_cp "${SCRIPT_DIR}/schemas/repair-failed-report-profile.v1.json"    "${TARGET}/schemas/repair-failed-report-profile.v1.json"
@@ -679,11 +683,12 @@ if [[ "$DRY_RUN" != "true" && -d "$TARGET" ]]; then
   add_fw "templates/execution-plan.md"  "template"    "created"
   add_fw "templates/reflect-entry.md"   "template"    "created"
   add_fw "templates/tracks-merge-report.md" "template" "created"
-  # ECL v1.0 artefacts
+  # ECL v2.0 artefacts (v1 envelope schema retained for §7.3 back-compat validation)
   # ECL_VERSION role is "ecl-version" per EIIS v1.4 §3.7.1 (was "other" at v1.3).
   add_fw "ECL_VERSION"                                        "ecl-version" "created"
   add_fw "schemas/install.manifest.v1.json"                   "other"    "created"
   add_fw "schemas/ecl-envelope.v1.json"                      "other"    "created"
+  add_fw "schemas/ecl-envelope.v2.json"                      "other"    "created"
   add_fw "schemas/_base-profile.v1.json"                     "other"    "created"
   add_fw "schemas/vivi-completion-report-profile.v1.json"   "other"    "created"
   add_fw "schemas/repair-failed-report-profile.v1.json"      "other"    "created"
