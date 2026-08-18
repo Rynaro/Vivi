@@ -11,10 +11,10 @@
 load helpers.bash
 
 REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
-CONTEXT_ENG="${REPO_ROOT}/skills/context-engineering.md"
-LOOP_NATIVE="${REPO_ROOT}/skills/loop-native.md"
-MEMORY_MGMT="${REPO_ROOT}/skills/memory-management.md"
-AGENT_MD="${REPO_ROOT}/agent.md"
+CONTEXT_ENG="${REPO_ROOT}/skills/context-engineering/SKILL.md"
+LOOP_NATIVE="${REPO_ROOT}/skills/loop-native/SKILL.md"
+MEMORY_MGMT="${REPO_ROOT}/skills/memory-management/SKILL.md"
+AGENT_MD="${REPO_ROOT}/PERSONA.md"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # S1.8 — context-engineering.md references all 7 atlas-aci tools
@@ -164,21 +164,21 @@ AGENT_MD="${REPO_ROOT}/agent.md"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Agent.md guard — wiring must NOT be in agent.md (P0 token budget)
+# Agent.md guard — wiring must NOT be in PERSONA.md (P0 token budget)
 # ─────────────────────────────────────────────────────────────────────────────
 
-@test "GUARD: agent.md does NOT contain inline mcp__atlas-aci__ tool references" {
-  # All atlas-aci wiring lives in skills/context-engineering.md, not the <=1000-token agent.md.
+@test "GUARD: PERSONA.md does NOT contain inline mcp__atlas-aci__ tool references" {
+  # All atlas-aci wiring lives in skills/context-engineering/SKILL.md, not the <=1000-token PERSONA.md.
   if grep -q 'mcp__atlas-aci__' "${AGENT_MD}"; then
-    echo "FAIL: agent.md contains mcp__atlas-aci__ wiring — must stay in skills/" >&3
+    echo "FAIL: PERSONA.md contains mcp__atlas-aci__ wiring — must stay in skills/" >&3
     return 1
   fi
 }
 
-@test "GUARD: agent.md does NOT contain inline mcp__crystalium__ tool references" {
-  # All crystalium wiring lives in skills/memory-management.md + skills/loop-native.md.
+@test "GUARD: PERSONA.md does NOT contain inline mcp__crystalium__ tool references" {
+  # All crystalium wiring lives in skills/memory-management/SKILL.md + skills/loop-native/SKILL.md.
   if grep -q 'mcp__crystalium__' "${AGENT_MD}"; then
-    echo "FAIL: agent.md contains mcp__crystalium__ wiring — must stay in skills/" >&3
+    echo "FAIL: PERSONA.md contains mcp__crystalium__ wiring — must stay in skills/" >&3
     return 1
   fi
 }
@@ -187,7 +187,7 @@ AGENT_MD="${REPO_ROOT}/agent.md"
 # S2 — host-adaptive shape (iterate vs fanout) + red gate + judge gate wiring
 # ─────────────────────────────────────────────────────────────────────────────
 
-METHODOLOGY="${REPO_ROOT}/skills/methodology.md"
+METHODOLOGY="${REPO_ROOT}/skills/methodology/SKILL.md"
 
 @test "S2: loop-native.md documents the FANOUT shape (--fanout with --max-attempts 1)" {
   grep -q -- '--fanout 3 --max-attempts 1' "${LOOP_NATIVE}"
@@ -235,7 +235,7 @@ METHODOLOGY="${REPO_ROOT}/skills/methodology.md"
   grep -q 'eidolons add apivr' "${METHODOLOGY}"
 }
 
-@test "S2: agent.md stays a pointer — no inline Stage-2 loop wiring in the always-loaded entry" {
+@test "S2: PERSONA.md stays a pointer — no inline Stage-2 loop wiring in the always-loaded entry" {
   ! grep -q -- '--fanout' "${AGENT_MD}"
   ! grep -q -- '--require-red' "${AGENT_MD}"
 }

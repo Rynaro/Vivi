@@ -8,7 +8,7 @@ Vivi is **derived from `APIVR-Delta@v3.6.0`** and inherits its validated discipl
 
 ## Decisions
 
-**D1 — Close the loop (the reason Vivi exists).** APIVR-Δ declared the autonomous edit-run-test loop "out of scope (nexus gap R1)" in four places. The evidence makes the closed execution-feedback loop the **dominant performance lever** for code agents (RLEF, ICLR'25; S\*, EMNLP-Findings'25; SE-agent survey 2510.09721). Vivi reverses that scope decision: the V phase **is** the loop (`skills/loop-native.md`), driving the shipped `eidolons sandbox loop` substrate.
+**D1 — Close the loop (the reason Vivi exists).** APIVR-Δ declared the autonomous edit-run-test loop "out of scope (nexus gap R1)" in four places. The evidence makes the closed execution-feedback loop the **dominant performance lever** for code agents (RLEF, ICLR'25; S\*, EMNLP-Findings'25; SE-agent survey 2510.09721). Vivi reverses that scope decision: the V phase **is** the loop (`skills/loop-native/SKILL.md`), driving the shipped `eidolons sandbox loop` substrate.
 
 **D2 — External feedback only; fresh context per retry.** Intrinsic self-correction without external feedback degrades (Kamoi, TACL'24; Huang, ICLR'24); models self-condition on prior errors; a model fixes an error when told *where* it is (Tyen et al.). So the loop is driven by **real test execution + localized feedback**, and each retry starts from **fresh context** — reversing APIVR-Δ's default single-track retry, which re-attempted in the same context window (self-conditioning).
 

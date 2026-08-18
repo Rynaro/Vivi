@@ -33,4 +33,18 @@ bash install.sh            # auto-detect hosts; target ./.eidolons/vivi
 bash install.sh --help     # flags: --target --hosts --force --dry-run --non-interactive ...
 ```
 
-Full methodology: `SPEC.md` · always-loaded entry: `agent.md` · skills: `skills/`.
+Full methodology: `SPEC.md` · always-loaded entry: `PERSONA.md` · skills: `skills/`.
+
+<!-- eiis-v3-package:start -->
+## EIIS v3 package
+
+This repository has the same self-contained package shape as every roster Eidolon:
+
+- `PERSONA.md` — bounded identity, triggers, authority, refusals, and handoffs.
+- `SPEC.md` — the authoritative methodology.
+- `skills/<methodology>/SKILL.md` — unique skill discovery entrypoints.
+- `manifest.json` — immutable package metadata and resource inventory.
+- `install.sh` — package-only installer; the nexus owns vendor adapters.
+
+See [INSTALL.md](INSTALL.md) for nexus and standalone installation.
+<!-- eiis-v3-package:end -->

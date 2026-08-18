@@ -104,12 +104,12 @@ The loop invokes the fix-hook once per failing iteration. Vivi's invocation MUST
   ```
 
   Target the reported `loci` (exact failing assertion / file:line frame). Load
-  `skills/context-engineering.md` for the atlas-aci-driven in-loop loci assembly
+  `skills/context-engineering/SKILL.md` for the atlas-aci-driven in-loop loci assembly
   procedure — do NOT re-read whole files.
 
 - **Per-iteration crystalium recall (before the edit — S1.9).**
   After reading feedback and BEFORE making any code edit, perform the hard-precision-gated
-  failure-signature recall from `skills/memory-management.md §Per-Iteration Failure-Signature
+  failure-signature recall from `skills/memory-management/SKILL.md §Per-Iteration Failure-Signature
   Recall`. Procedural/semantic hits short-circuit re-derivation. Ignore low-confidence hits.
   Never let a memory miss block the edit step.
 
@@ -160,7 +160,7 @@ On success: the loop emits a **candidate diff** for review — Vivi does **not**
 
 **ISE grade on the completion envelope (ECL v2.0 §6.5.2).** `vivi-completion-report` sets `ise.assertion_grade="validated"` — this is the ONLY one of Vivi's three envelope kinds that earns it, because it is the only one gated by pass^k (§4): the loop only reaches this exit after the candidate passed the substrate's spec-mandated regression-first-then-reproduction verification `k` times over, external to Vivi's own say-so. That is precisely what `validated` requires ("emitter ran spec-mandated gates") — it is not a self-report. `reasoning-request` and `repair-failed-report` are `self-attested`: neither exits through the pass^k gate (one precedes verification, the other is the verification failing out). All three set `ise.receiver_authorization = {auto_route: true, auto_merge: false, auto_deploy: false}` — diff-not-apply means Vivi never authorizes a receiver to merge or deploy on its behalf.
 
-**Mandatory post-pass^k commit (S1.9).** Immediately after `final="passed"` (pass^k-green confirmed), Vivi MUST call `mcp__crystalium__commit(layer=procedural, ...)` as specified in `skills/memory-management.md §Mandatory Post-pass^k Commit`. This is NOT discretionary — it is a methodology obligation on every successful loop exit. The verified fix-pattern (diff + anchoring tests + failure_signature) is the most reliable learning signal available; committing it makes it available for future Vivi sessions and for VIGIL cross-Eidolon pattern reuse. **ADAPTER-NOT-ENGINE: the CODER (Vivi) issues this call; sandbox.sh never does.**
+**Mandatory post-pass^k commit (S1.9).** Immediately after `final="passed"` (pass^k-green confirmed), Vivi MUST call `mcp__crystalium__commit(layer=procedural, ...)` as specified in `skills/memory-management/SKILL.md §Mandatory Post-pass^k Commit`. This is NOT discretionary — it is a methodology obligation on every successful loop exit. The verified fix-pattern (diff + anchoring tests + failure_signature) is the most reliable learning signal available; committing it makes it available for future Vivi sessions and for VIGIL cross-Eidolon pattern reuse. **ADAPTER-NOT-ENGINE: the CODER (Vivi) issues this call; sandbox.sh never does.**
 
 ---
 
