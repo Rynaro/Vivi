@@ -27,11 +27,11 @@ cortex `methodology/cortex/esl-protocol.md`.
    `acceptance_checks` are your test anchors (anti-overfit; derived from the
    spec, never from a candidate impl). Drive `eidolons sandbox loop` as the
    `--fix-hook`, `--protect`-ing the anchors, **pass^k** before accepting — see
-   `skills/loop-native.md`.
+   `skills/loop-native/SKILL.md`.
 3. **hand off to the CHECKER** — on green, hand off to **Kupo** (at `verified`)
    on success, or **VIGIL** on failure. Emit your normal ECL envelope
    (`vivi-completion-report` → success path; `repair-failed-report` → escalation
-   path; see `skills/methodology.md` "ECL emission"). You do **NOT** advance the
+   path; see `skills/methodology/SKILL.md` "ECL emission"). You do **NOT** advance the
    change to `verified` yourself.
 
 ## Invariants

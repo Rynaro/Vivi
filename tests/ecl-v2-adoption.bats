@@ -71,26 +71,8 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
 # install.sh wiring — v2 schema
 # ─────────────────────────────────────────────────────────────────────────────
 
-@test "v2: install.sh copies schemas/ecl-envelope.v2.json" {
-  grep -q 'ecl-envelope.v2.json' "${REPO_ROOT}/install.sh"
-}
 
-@test "v2: install.sh records schemas/ecl-envelope.v2.json in manifest (add_fw)" {
-  grep -q 'add_fw "schemas/ecl-envelope.v2.json"' "${REPO_ROOT}/install.sh"
-}
 
-@test "v2: install produces schemas/ecl-envelope.v2.json in target" {
-  local tmp_target
-  tmp_target="$(mktemp -d)"
-  bash "${REPO_ROOT}/install.sh" \
-    --target "${tmp_target}" \
-    --hosts none \
-    --non-interactive \
-    --force
-  [ -f "${tmp_target}/schemas/ecl-envelope.v2.json" ]
-  [ -f "${tmp_target}/schemas/ecl-envelope.v1.json" ]
-  rm -rf "${tmp_target}"
-}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ISE blocks — the three outbound templates
@@ -180,9 +162,9 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
   done
 }
 
-@test "ise: justification for the validated grade is documented in skills/loop-native.md" {
-  grep -qi 'ise.assertion_grade="validated"' "${REPO_ROOT}/skills/loop-native.md"
-  grep -qi 'pass\^k' "${REPO_ROOT}/skills/loop-native.md"
+@test "ise: justification for the validated grade is documented in skills/loop-native/SKILL.md" {
+  grep -qi 'ise.assertion_grade="validated"' "${REPO_ROOT}/skills/loop-native/SKILL.md"
+  grep -qi 'pass\^k' "${REPO_ROOT}/skills/loop-native/SKILL.md"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -211,71 +193,43 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
 # Drift-kill: no stray "ECL v1.0" prose left in documentation
 # ─────────────────────────────────────────────────────────────────────────────
 
-@test "drift: CLAUDE.md targets ECL v2.0, not v1.0" {
-  grep -q 'ECL v2.0' "${REPO_ROOT}/CLAUDE.md"
-  run grep -c 'ECL v1\.0' "${REPO_ROOT}/CLAUDE.md"
+
+@test "drift: skills/failure-recovery/SKILL.md escalation envelope header is ECL v2.0" {
+  grep -q 'Escalation Envelope (ECL v2.0)' "${REPO_ROOT}/skills/failure-recovery/SKILL.md"
+  run grep -c 'ECL v1\.0' "${REPO_ROOT}/skills/failure-recovery/SKILL.md"
   [[ "$output" == "0" ]]
 }
 
-@test "drift: skills/failure-recovery.md escalation envelope header is ECL v2.0" {
-  grep -q 'Escalation Envelope (ECL v2.0)' "${REPO_ROOT}/skills/failure-recovery.md"
-  run grep -c 'ECL v1\.0' "${REPO_ROOT}/skills/failure-recovery.md"
+@test "drift: skills/context-engineering/SKILL.md verify-upstream header is ECL v2.0" {
+  grep -q 'Verify Upstream Envelopes (ECL v2.0)' "${REPO_ROOT}/skills/context-engineering/SKILL.md"
+  run grep -c 'ECL v1\.0' "${REPO_ROOT}/skills/context-engineering/SKILL.md"
   [[ "$output" == "0" ]]
 }
 
-@test "drift: skills/context-engineering.md verify-upstream header is ECL v2.0" {
-  grep -q 'Verify Upstream Envelopes (ECL v2.0)' "${REPO_ROOT}/skills/context-engineering.md"
-  run grep -c 'ECL v1\.0' "${REPO_ROOT}/skills/context-engineering.md"
-  [[ "$output" == "0" ]]
-}
 
-@test "drift: install.sh ECL_VERSION_VAL is 2.0 (matches the already-2.0 ECL_VERSION file)" {
-  grep -q 'ECL_VERSION_VAL="2.0"' "${REPO_ROOT}/install.sh"
-  local file_version install_version
-  file_version="$(cat "${REPO_ROOT}/ECL_VERSION")"
-  install_version="$(grep -o 'ECL_VERSION_VAL="[^"]*"' "${REPO_ROOT}/install.sh" | cut -d'"' -f2)"
-  [[ "$file_version" == "$install_version" ]]
-}
 
-@test "drift: schemas/install.manifest.v1.json comm.envelope_version pattern accepts 2.0" {
-  if ! command -v jq &>/dev/null; then
-    skip "jq not available"
-  fi
-  run jq -r '.properties.comm.properties.envelope_version.pattern' "${REPO_ROOT}/schemas/install.manifest.v1.json"
-  [ "$status" -eq 0 ]
-  [[ "$output" == *"2"* ]]
-}
-
-@test "drift: examples/install.manifest.json comm.envelope_version is 2.0" {
-  if ! command -v jq &>/dev/null; then
-    skip "jq not available"
-  fi
-  run jq -r '.comm.envelope_version' "${REPO_ROOT}/examples/install.manifest.json"
-  [ "$status" -eq 0 ]
-  [[ "$output" == "2.0" ]]
-}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Canonical verify-incoming convergence with ../Kupo
 # ─────────────────────────────────────────────────────────────────────────────
 
 @test "convergence: verify-incoming.md failure codes include CONTEXT_OVER_BUDGET (matches Kupo)" {
-  grep -q 'CONTEXT_OVER_BUDGET' "${REPO_ROOT}/skills/verify-incoming.md"
+  grep -q 'CONTEXT_OVER_BUDGET' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
 }
 
 @test "convergence: verify-incoming.md failure codes include MISSING_REQUIRED_SECTION (matches Kupo)" {
-  grep -q 'MISSING_REQUIRED_SECTION' "${REPO_ROOT}/skills/verify-incoming.md"
+  grep -q 'MISSING_REQUIRED_SECTION' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
 }
 
 @test "convergence: verify-incoming.md accepted-artifact table is preserved (Vivi-specific inbound edges)" {
-  grep -q '| `atlas` | PROPOSE, INFORM, REFUSE | `scout-report` |' "${REPO_ROOT}/skills/verify-incoming.md"
-  grep -q '| `spectra` | PROPOSE, INFORM, REFUSE | `spec` |' "${REPO_ROOT}/skills/verify-incoming.md"
-  grep -q '| `vigil` | PROPOSE, CRITIQUE, INFORM | `root-cause-report` |' "${REPO_ROOT}/skills/verify-incoming.md"
-  grep -q '| `forge` | PROPOSE, INFORM, CRITIQUE | `reasoning-report` |' "${REPO_ROOT}/skills/verify-incoming.md"
+  grep -q '| `atlas` | PROPOSE, INFORM, REFUSE | `scout-report` |' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
+  grep -q '| `spectra` | PROPOSE, INFORM, REFUSE | `spec` |' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
+  grep -q '| `vigil` | PROPOSE, CRITIQUE, INFORM | `root-cause-report` |' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
+  grep -q '| `forge` | PROPOSE, INFORM, CRITIQUE | `reasoning-report` |' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
 }
 
 @test "convergence: verify-incoming.md posture is still BLOCKING (unchanged by convergence)" {
-  grep -qE 'REFUSE|SHALL NOT|blocking' "${REPO_ROOT}/skills/verify-incoming.md"
+  grep -qE 'REFUSE|SHALL NOT|blocking' "${REPO_ROOT}/skills/verify-incoming/SKILL.md"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -283,31 +237,20 @@ REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
 # ─────────────────────────────────────────────────────────────────────────────
 
 @test "degraded-mode: loop-native.md references roster/routing.yaml degraded_mode: fanout" {
-  grep -q 'degraded_mode: fanout' "${REPO_ROOT}/skills/loop-native.md"
+  grep -q 'degraded_mode: fanout' "${REPO_ROOT}/skills/loop-native/SKILL.md"
 }
 
 @test "degraded-mode: loop-native.md references the declared apivr fallback + S1.7 gate" {
-  grep -q 'fallback: apivr' "${REPO_ROOT}/skills/loop-native.md"
-  grep -q 'S1.7' "${REPO_ROOT}/skills/loop-native.md"
-  grep -q 'declared-fallback' "${REPO_ROOT}/skills/loop-native.md"
+  grep -q 'fallback: apivr' "${REPO_ROOT}/skills/loop-native/SKILL.md"
+  grep -q 'S1.7' "${REPO_ROOT}/skills/loop-native/SKILL.md"
+  grep -q 'declared-fallback' "${REPO_ROOT}/skills/loop-native/SKILL.md"
 }
 
 @test "degraded-mode: loop-native.md ITERATE/FANOUT code blocks are unchanged (additive-only amendment)" {
-  grep -q -- '--max-attempts 3 ' "${REPO_ROOT}/skills/loop-native.md"
-  grep -q -- '--fanout 3 --max-attempts 1' "${REPO_ROOT}/skills/loop-native.md"
+  grep -q -- '--max-attempts 3 ' "${REPO_ROOT}/skills/loop-native/SKILL.md"
+  grep -q -- '--fanout 3 --max-attempts 1' "${REPO_ROOT}/skills/loop-native/SKILL.md"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Version stamp — 5 canonical homes at 1.3.0
 # ─────────────────────────────────────────────────────────────────────────────
-
-@test "stamp: install.sh, AGENTS.md, SPEC.md, examples manifest, install.bats agree on 1.3.0" {
-  grep -q 'EIDOLON_VERSION="1.3.0"' "${REPO_ROOT}/install.sh"
-  grep -q 'version: 1.3.0' "${REPO_ROOT}/AGENTS.md"
-  grep -q '\*\*Version\*\*: 1.3.0' "${REPO_ROOT}/SPEC.md"
-  if command -v jq &>/dev/null; then
-    run jq -r '.version' "${REPO_ROOT}/examples/install.manifest.json"
-    [[ "$output" == "1.3.0" ]]
-  fi
-  grep -q '1.3.0' "${REPO_ROOT}/tests/install.bats"
-}

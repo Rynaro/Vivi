@@ -35,7 +35,7 @@ tasks in the same module, known reusable assets, and previous failure patterns.
 
 Score matches by: path proximity → recency → outcome quality. Budget: ≤ 20 entries.
 
-See `agents/skills/memory-management.md` for the full routing decision and protocol.
+See `agents/skills/memory-management/SKILL.md` for the full routing decision and protocol.
 
 ### Step 2: Repo Map Generation
 Before reading any file in detail, generate a structural overview:
@@ -224,7 +224,7 @@ mcp__crystalium__plan_replan(
 
 ### ECL emit on FORGE consultation
 
-If Plan-phase reasoning calls for a FORGE consultation (adversarial reasoning, trade-off arbitration), emit a `reasoning-request.envelope.json` next to the question artefact (template at `templates/reasoning-request.envelope.json`). Required: `to.eidolon=forge`, `performative=REQUEST`, `artifact.kind=reasoning-request`. Body validates against `schemas/_base-profile.v1.json`. `ise.assertion_grade="self-attested"` (ECL v2.0 §6.5.2; this envelope precedes any loop-native verification — see `skills/loop-native.md` §6 for the grade rationale). Skip the envelope when `ECL_VERSION` is absent.
+If Plan-phase reasoning calls for a FORGE consultation (adversarial reasoning, trade-off arbitration), emit a `reasoning-request.envelope.json` next to the question artefact (template at `templates/reasoning-request.envelope.json`). Required: `to.eidolon=forge`, `performative=REQUEST`, `artifact.kind=reasoning-request`. Body validates against `schemas/_base-profile.v1.json`. `ise.assertion_grade="self-attested"` (ECL v2.0 §6.5.2; this envelope precedes any loop-native verification — see `skills/loop-native/SKILL.md` §6 for the grade rationale). Skip the envelope when `ECL_VERSION` is absent.
 
 ---
 
@@ -306,7 +306,7 @@ Run tests incrementally, not all at once:
 
 ### ECL emit on Implement-phase exit
 
-On phase exit, emit `vivi-completion-report.envelope.json` next to the completion artefact (template at `templates/vivi-completion-report.envelope.json`). Required: `to.eidolon=idg`, `performative=PROPOSE`, `artifact.kind=vivi-completion-report`, `integrity.method=sha256` matching the payload bytes. Profile schema: `schemas/vivi-completion-report-profile.v1.json` (required keys: `files_changed_count`, `tests_run`, `tests_passed`). `ise.assertion_grade="validated"` (ECL v2.0 §6.5.2) — justified because this envelope is only reachable after the V-phase closed loop passed **pass^k** against the regression + anchoring tests (`skills/loop-native.md` §4, §6); that is the spec-mandated verification gate the `validated` grade requires, not a self-report. Skip when `ECL_VERSION` is absent.
+On phase exit, emit `vivi-completion-report.envelope.json` next to the completion artefact (template at `templates/vivi-completion-report.envelope.json`). Required: `to.eidolon=idg`, `performative=PROPOSE`, `artifact.kind=vivi-completion-report`, `integrity.method=sha256` matching the payload bytes. Profile schema: `schemas/vivi-completion-report-profile.v1.json` (required keys: `files_changed_count`, `tests_run`, `tests_passed`). `ise.assertion_grade="validated"` (ECL v2.0 §6.5.2) — justified because this envelope is only reachable after the V-phase closed loop passed **pass^k** against the regression + anchoring tests (`skills/loop-native/SKILL.md` §4, §6); that is the spec-mandated verification gate the `validated` grade requires, not a self-report. Skip when `ECL_VERSION` is absent.
 
 After the envelope is produced and verified (V-VERIFY phase), ingest it into
 CRYSTALIUM (if available):
@@ -325,7 +325,7 @@ mcp__crystalium__ingest(
 ## V — VERIFY Phase (loop-native)
 
 Vivi does **not** "run the checks once and decide." It **drives the closed loop**
-`eidolons sandbox loop` (see `skills/loop-native.md`) and acts as its
+`eidolons sandbox loop` (see `skills/loop-native/SKILL.md`) and acts as its
 `--fix-hook`: the loop runs the verification, and on failure re-invokes Vivi's
 repair step (R, below) in **fresh context**, bounded, until green or capped. This
 is the core of the loop-native cycle and the reason Vivi supersedes its
@@ -395,7 +395,7 @@ untrusted code without `--via` or an explicit `--allow-unsafe-host`.
 ## R — REFLECT Phase (Failure Only) — fresh-context repair
 
 R runs as the loop's `--fix-hook` on each failing iteration. Load skill:
-`skills/failure-recovery.md`.
+`skills/failure-recovery/SKILL.md`.
 
 ### Fresh-context per attempt (the decisive discipline)
 **Each repair attempt starts from a CLEAN context**: the localized feedback
@@ -428,7 +428,7 @@ absent (the escalation still happens).
 
 ### Failure Protocol (fresh-context, localized)
 
-See `skills/failure-recovery.md` for the full taxonomy. Quick reference:
+See `skills/failure-recovery/SKILL.md` for the full taxonomy. Quick reference:
 
 | Iteration | Condition | Action |
 |-----------|-----------|--------|
@@ -510,7 +510,7 @@ Status: SUGGESTION ONLY — Do not implement
 ## Post-Task: Memory Update (Δ/R phase)
 
 After every task (success or failure), update memory via the active path.
-See `agents/skills/memory-management.md` for the full protocol.
+See `agents/skills/memory-management/SKILL.md` for the full protocol.
 
 **CRYSTALIUM path** (when available):
 
@@ -532,7 +532,7 @@ mcp__crystalium__session_end()   # triggers Dream consolidation
 ```
 
 **Standalone path** (when CRYSTALIUM absent): write to `agents/memories/`
-files per `skills/memory-management.md §Standalone Fallback`.
+files per `skills/memory-management/SKILL.md §Standalone Fallback`.
 
 ---
 

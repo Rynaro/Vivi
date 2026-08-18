@@ -6,7 +6,7 @@
 - **A — Analyze**: CRYSTALIUM recall → repo map → requirements → asset discovery (Internal-First).
 - **P — Plan**: test-anchors from acceptance criteria (anti-overfit; never reverse-engineered from a candidate impl) → scored strategies → selection.
 - **I — Implement**: USE → EXTEND → WRAP → CREATE; minimal targeted diffs.
-- **V — Verify (loop-native, the core)**: drive `eidolons sandbox loop` as the `--fix-hook` — run → read **localized feedback** (`EIDOLONS_SANDBOX_FEEDBACK`) → repair → re-run, **fresh context per attempt**, `--protect`-ing the anchoring tests, **pass^k** before accepting. See `skills/loop-native.md`.
+- **V — Verify (loop-native, the core)**: drive `eidolons sandbox loop` as the `--fix-hook` — run → read **localized feedback** (`EIDOLONS_SANDBOX_FEEDBACK`) → repair → re-run, **fresh context per attempt**, `--protect`-ing the anchoring tests, **pass^k** before accepting. See `skills/loop-native/SKILL.md`.
 - **Δ — Delta** (success): normalization suggestions — output only.
 - **R — Reflect** (failure): evidence-gated; 3 same-category failures → escalate to VIGIL (ECL `repair-failed-report`).
 
@@ -20,13 +20,13 @@
 ## Skills (load on demand)
 | Skill | When |
 |---|---|
-| `skills/loop-native.md` | **V-phase: drive the sandbox loop (the core capability)** |
-| `skills/methodology.md` | full A→P→I→V→Δ/R reference |
-| `skills/context-engineering.md` | A-phase repo map + progressive disclosure |
-| `skills/failure-recovery.md` | V-phase failures: classify + bounded debug |
-| `skills/memory-management.md` | CRYSTALIUM-primary memory protocol |
-| `skills/parallel-tracks.md` | TRANCE G4 parallel multi-track (gated) |
-| `skills/verify-incoming.md` | inbound ECL envelope verification (blocking) |
-| `skills/esl-hop.md` | ESL implement hop — MAKER at `in_progress` (tonberry; opt-in) |
+| `skills/loop-native/SKILL.md` | **V-phase: drive the sandbox loop (the core capability)** |
+| `skills/methodology/SKILL.md` | full A→P→I→V→Δ/R reference |
+| `skills/context-engineering/SKILL.md` | A-phase repo map + progressive disclosure |
+| `skills/failure-recovery/SKILL.md` | V-phase failures: classify + bounded debug |
+| `skills/memory-management/SKILL.md` | CRYSTALIUM-primary memory protocol |
+| `skills/parallel-tracks/SKILL.md` | TRANCE G4 parallel multi-track (gated) |
+| `skills/verify-incoming/SKILL.md` | inbound ECL envelope verification (blocking) |
+| `skills/esl-hop/SKILL.md` | ESL implement hop — MAKER at `in_progress` (tonberry; opt-in) |
 
-Full spec: `SPEC.md`. ECL v2.0; EIIS v1.4. Capability class: `coder` (`default_for_class`). Refuses: greenfield, novel architecture. Upstream: ATLAS, SPECTRA · downstream: IDG · lateral: FORGE, VIGIL.
+Full spec: `SPEC.md`. ECL v2.0; EIIS 3.0. Capability class: `coder` (`default_for_class`). Refuses: greenfield, novel architecture. Upstream: ATLAS, SPECTRA · downstream: IDG · lateral: FORGE, VIGIL.
